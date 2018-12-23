@@ -62,7 +62,7 @@ public class GoliathENVIOUSFX extends Application
         stage.setOpacity(.98);
         stage.setMinWidth(960*SCALE);
         stage.setMinHeight(500*SCALE);
-        stage.setTitle("Goliath ENVIOUS FX V1");
+        stage.setTitle("Goliath Envious FX V1");
         stage.show();
     }
 }
