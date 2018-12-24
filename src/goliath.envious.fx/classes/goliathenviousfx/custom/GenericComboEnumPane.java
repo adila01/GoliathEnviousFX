@@ -67,19 +67,19 @@ public class GenericComboEnumPane<E> extends BorderPane
         apply = new Button("Apply");
         apply.setOnMouseClicked(new ApplyHandler());
         apply.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        apply.prefHeightProperty().bind(super.heightProperty().multiply(.38));
+        apply.prefHeightProperty().bind(super.heightProperty().multiply(.25));
         
         reset = new Button("Reset");
         reset.setOnMouseClicked(new ResetHandler());
         reset.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        reset.prefHeightProperty().bind(super.heightProperty().multiply(.38));
+        reset.prefHeightProperty().bind(super.heightProperty().multiply(.25));
         
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(10*GoliathENVIOUSFX.SCALE);
         buttonBox.getChildren().add(apply);
         buttonBox.getChildren().add(reset);
         
-        super.setLeft(text);
+        super.setTop(text);
         super.setBottom(buttonBox);
         super.setRight(combo);
     }
