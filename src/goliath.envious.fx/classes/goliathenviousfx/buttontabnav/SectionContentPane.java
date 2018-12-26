@@ -24,10 +24,14 @@
 package goliathenviousfx.buttontabnav;
 
 import goliathenviousfx.GoliathENVIOUSFX;
+import goliathenviousfx.custom.Space;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class SectionContentPane extends VBox
 {
@@ -38,10 +42,22 @@ public class SectionContentPane extends VBox
 
         super.getChildren().add(new Label(title));
         
+        DoubleBinding width = super.widthProperty().multiply(.85);
+        DoubleBinding height = super.heightProperty().multiply(.003);
+        
+        Space space = new Space(false);
+        space.minHeightProperty().bind(height);
+        space.maxHeightProperty().bind(height);
+        space.minWidthProperty().bind(width);
+        space.maxWidthProperty().bind(width);
+        
+        super.getChildren().add(space);
+        
         ((Label)super.getChildren().get(0)).setStyle("-fx-background-color: -fx-theme-header;");
+        ((Label)super.getChildren().get(0)).setFont(Font.font(Font.getDefault().getFamily(), FontWeight.EXTRA_BOLD, GoliathENVIOUSFX.FONT.getSize()));
         ((Label)super.getChildren().get(0)).setAlignment(Pos.CENTER);
         ((Label)super.getChildren().get(0)).setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
-        ((Label)super.getChildren().get(0)).minWidthProperty().bind(super.widthProperty().multiply(.85));
-        ((Label)super.getChildren().get(0)).maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        ((Label)super.getChildren().get(0)).minWidthProperty().bind(width);
+        ((Label)super.getChildren().get(0)).maxWidthProperty().bind(width);
     }
 }

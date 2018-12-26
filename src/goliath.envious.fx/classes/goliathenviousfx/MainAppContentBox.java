@@ -25,12 +25,16 @@ package goliathenviousfx;
 
 import goliathenviousfx.buttontabnav.ContentPane;
 import goliathenviousfx.buttontabnav.NavButton;
+import goliathenviousfx.buttontabnav.osd.AboutContentPane;
 import goliathenviousfx.buttontabnav.fan.FanContentPane;
 import goliathenviousfx.buttontabnav.gpu.GPUContentPane;
+import goliathenviousfx.buttontabnav.nvxconfig.NvXConfigPane;
 import goliathenviousfx.buttontabnav.overview.OverviewContentPane;
+import goliathenviousfx.buttontabnav.reactions.ReactionContentPane;
 import goliathenviousfx.buttontabnav.smi.SMIContentPane;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.binding.DoubleBinding;
 import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -48,28 +52,34 @@ public class MainAppContentBox extends HBox
         super();
         super.prefHeightProperty().bind(AppRoot.getInstance().heightProperty());
         
+        DoubleBinding buttonBind = super.widthProperty().multiply(.15);
+        
         VBox buttonBox = new VBox();
-        buttonBox.minWidthProperty().bind(super.widthProperty().multiply(.15));
-        buttonBox.maxWidthProperty().bind(super.widthProperty().multiply(.15));
+        buttonBox.minWidthProperty().bind(buttonBind);
+        buttonBox.maxWidthProperty().bind(buttonBind);
         buttonBox.setStyle("-fx-background-color: -fx-theme-background-alt;");
         
         contentScroller = new ScrollPane();
         contentScroller.prefWidthProperty().bind(super.widthProperty().multiply(.85));
+        contentScroller.maxWidthProperty().bind(super.widthProperty().multiply(.85));
         contentScroller.setFitToHeight(true);
         contentScroller.setFitToWidth(true);
         contentScroller.setStyle("-fx-padding: 0; " +
         "-fx-background-insets: 0;");
         contentScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         contentScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        contentScroller.prefWidthProperty().bind(super.widthProperty().multiply(.85));
         
         navButtons = new ArrayList<>();
         navButtons.add(new NavButton("Overview", new OverviewContentPane()));
         navButtons.add(new NavButton("GPU", new GPUContentPane()));
         navButtons.add(new NavButton("Fan", new FanContentPane()));
         navButtons.add(new NavButton("NvSMI", new SMIContentPane()));
+        navButtons.add(new NavButton("NvXConfig", new NvXConfigPane()));
+        navButtons.add(new NavButton("NvReactions", new ReactionContentPane()));
         navButtons.add(new NavButton("On Screen Display", new ContentPane()));
         //navButtons.add(new NavButton("NvReactions", new ContentPane()));
+        navButtons.add(new NavButton("About", new AboutContentPane()));
+        
         
         buttonBox.getChildren().addAll(navButtons);
         
@@ -77,8 +87,8 @@ public class MainAppContentBox extends HBox
         {
             navButtons.get(i).minHeightProperty().bind(super.heightProperty().multiply(.06));
             navButtons.get(i).maxHeightProperty().bind(super.heightProperty().multiply(.06));
-            navButtons.get(i).minWidthProperty().bind(super.widthProperty().multiply(.15));
-            navButtons.get(i).maxWidthProperty().bind(super.widthProperty().multiply(.15));
+            navButtons.get(i).minWidthProperty().bind(buttonBind);
+            navButtons.get(i).maxWidthProperty().bind(buttonBind);
             navButtons.get(i).setOnMouseClicked(new ViewSwitchHandler());
             navButtons.get(i).setOnMouseEntered(new MouseEnterHandler());
             navButtons.get(i).setOnMouseExited(new MouseExitHandler());

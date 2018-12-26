@@ -32,6 +32,7 @@ public class FanContentPane extends ContentPane
     {
         super();
         
-        super.getChildren().add(new FanSectionPane(NvSettings.getPrimaryGPU().getFan()));
+        for(int i = 0; i < NvSettings.getGPUS().size(); i++)
+            super.getChildren().add(new FanSectionPane(NvSettings.getGPUS().get(i).getFan()));
     }
 }

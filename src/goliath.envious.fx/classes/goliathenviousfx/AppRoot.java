@@ -41,7 +41,6 @@ public class AppRoot extends VBox
     {
         super();
         INSTANCE = this;
-        //super.autosize();
         
         menuBar = new AppMenu();
         

@@ -29,6 +29,7 @@ import goliath.nvsettings.targets.NvSettingsGPU;
 import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -55,12 +56,14 @@ public class PowerMizerSectionPane extends SectionContentPane
         //super.widthProperty().addListener(new ContentSizer());
         gpu = g;
         
+        DoubleBinding bind = super.widthProperty().multiply(.85);
+        
         table = new TableView<>(FXCollections.observableArrayList(g.getPerfModes().getCurrentValue()));
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setMouseTransparent(true);
         table.setEditable(false);
-        table.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        table.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        table.minWidthProperty().bind(bind);
+        table.maxWidthProperty().bind(bind);
         table.setMinHeight(124*GoliathENVIOUSFX.SCALE);
         table.setMaxHeight(124*GoliathENVIOUSFX.SCALE);
         
@@ -104,8 +107,8 @@ public class PowerMizerSectionPane extends SectionContentPane
         table.getSelectionModel().select(gpu.getCurrentPerformanceLevel().getCurrentValue());
         
         comboPane = new GenericComboEnumPane(g.getPowerMizer());
-        comboPane.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        comboPane.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        comboPane.minWidthProperty().bind(bind);
+        comboPane.maxWidthProperty().bind(bind);
         
         super.getChildren().add(table);
         super.getChildren().add(comboPane);

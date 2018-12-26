@@ -31,10 +31,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.GoliathENVIOUSFX;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 
 public class GenericReadableTablePane extends VBox
-{ 
+{   
     private final TableView<ReadOnlyNvReadable> infoTable;
     private final TableColumn<ReadOnlyNvReadable, String> displayName;
     private final TableColumn<ReadOnlyNvReadable, String> displayValue;
@@ -45,9 +46,10 @@ public class GenericReadableTablePane extends VBox
         super.setAlignment(Pos.TOP_CENTER);
         super.setMinHeight(200*GoliathENVIOUSFX.SCALE);
         
+        DoubleBinding bind = super.widthProperty().multiply(.85);
         infoTable = new TableView<>(FXCollections.observableArrayList(readables));
-        infoTable.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        infoTable.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        infoTable.minWidthProperty().bind(bind);
+        infoTable.maxWidthProperty().bind(bind);
         infoTable.setEditable(false);
         infoTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 

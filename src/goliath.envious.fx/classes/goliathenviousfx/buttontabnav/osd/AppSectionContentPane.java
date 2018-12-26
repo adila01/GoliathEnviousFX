@@ -21,31 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package goliathenviousfx.buttontabnav.smi;
+package goliathenviousfx.buttontabnav.osd;
 
-import goliath.nvsmi.main.NvSMI;
+import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.GenericControllableSliderBox;
-import goliathenviousfx.custom.GenericReadableTablePane;
+import goliathenviousfx.custom.Space;
 import javafx.beans.binding.DoubleBinding;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 
-public class SMISectionPane extends SectionContentPane
+public class AppSectionContentPane extends SectionContentPane
 {
-    private final GenericReadableTablePane smiTable;
-    private final GenericControllableSliderBox powerSlider;
+    private final Label label;
     
-    public SMISectionPane()
+    public AppSectionContentPane()
     {
-        super("NvSMI Info & Control");
+        super("About Goliath Envious FX V1");
         
-        smiTable = new GenericReadableTablePane(NvSMI.READABLES);
         DoubleBinding bind = super.widthProperty().multiply(.85);
+
+        label = new Label("Goliath Envious FX is a modern Java/JavaFX frontend for GoliathENVIOUS Linux Nvidia GPU overclocking library.");
+        label.setAlignment(Pos.CENTER);
+        label.minWidthProperty().bind(bind);
+        label.maxWidthProperty().bind(bind);
+        label.setStyle("-fx-background-color: -fx-theme-header;");
+        label.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE));
         
-        powerSlider = new GenericControllableSliderBox(NvSMI.getPowerLimit());
-        powerSlider.minWidthProperty().bind(bind);
-        powerSlider.maxWidthProperty().bind(bind);
-        
-        super.getChildren().add(smiTable);
-        super.getChildren().add(powerSlider);
+        super.getChildren().add(label);
     }
 }

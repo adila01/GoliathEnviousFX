@@ -23,8 +23,10 @@
  */
 package goliathenviousfx.custom;
 
+import goliath.envious.enums.OperationalStatus;
 import goliath.envious.exceptions.ControllerResetFailedException;
 import goliath.envious.exceptions.ValueSetFailedException;
+import goliath.envious.interfaces.NvControllable;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.AppStatusBar;
 import goliathenviousfx.GoliathENVIOUSFX;
@@ -43,10 +45,11 @@ import javafx.scene.layout.HBox;
 
 public class GenericComboEnumPane<E> extends BorderPane
 {
-    private final ReadOnlyNvReadable<E> readable;
+    private ReadOnlyNvReadable<E> readable;
+    private NvControllable<E> controller;
     private final ComboBox<E> combo;
     private final Button apply;
-    private final Button reset;
+    private Button reset;
     private final Label text;
     
     public GenericComboEnumPane(ReadOnlyNvReadable<E> rdbl)
@@ -74,10 +77,47 @@ public class GenericComboEnumPane<E> extends BorderPane
         reset.prefWidthProperty().bind(super.widthProperty().multiply(.1));
         reset.prefHeightProperty().bind(super.heightProperty().multiply(.25));
         
+        if(!rdbl.getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
+        {
+            apply.setDisable(true);
+            reset.setDisable(true);
+        }
+        
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(10*GoliathENVIOUSFX.SCALE);
         buttonBox.getChildren().add(apply);
         buttonBox.getChildren().add(reset);
+        
+        super.setTop(text);
+        super.setBottom(buttonBox);
+        super.setRight(combo);
+    }
+    
+    public GenericComboEnumPane(NvControllable<E> cont)
+    {
+        super();
+        super.setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
+        super.setStyle("-fx-background-color: -fx-theme-header;");
+        
+        controller = cont;
+        
+        text = new Label(cont.getControlName());
+        text.setAlignment(Pos.CENTER_LEFT);
+        
+        combo = new ComboBox<>(FXCollections.observableArrayList(cont.getAllValues().getAllInRange()));
+        combo.getSelectionModel().select(cont.getMinValue());
+        
+        apply = new Button("Apply");
+        apply.setOnMouseClicked(new ControllerApplyHandler());
+        apply.prefWidthProperty().bind(super.widthProperty().multiply(.1));
+        apply.prefHeightProperty().bind(super.heightProperty().multiply(.25));
+        
+        if(!cont.getOperationalStatus().equals(OperationalStatus.CONTROLLABLE))
+            apply.setDisable(true);
+        
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(10*GoliathENVIOUSFX.SCALE);
+        buttonBox.getChildren().add(apply);
         
         super.setTop(text);
         super.setBottom(buttonBox);
@@ -106,6 +146,23 @@ public class GenericComboEnumPane<E> extends BorderPane
             catch (ValueSetFailedException ex)
             {
                 AppStatusBar.setActionText("Failed to set new value for " + readable.displayNameProperty().get() + ". Reason: " + ex.getLocalizedMessage() + ".");
+            }
+        }          
+    }
+    
+    private class ControllerApplyHandler implements EventHandler<MouseEvent>
+    {
+        @Override
+        public void handle(MouseEvent event)
+        {
+            try
+            {
+                controller.setValue(combo.getValue());
+                AppStatusBar.setActionText(controller.getControlName() + " has been set to " + combo.getValue() + ".");
+            }
+            catch (ValueSetFailedException ex)
+            {
+                AppStatusBar.setActionText("Failed to set new value for " + controller.getControlName() + ". Reason: " + ex.getLocalizedMessage() + ".");
             }
         }          
     }

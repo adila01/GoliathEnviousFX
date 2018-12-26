@@ -28,7 +28,9 @@ import goliath.nvsettings.targets.NvSettingsGPU;
 import goliath.nvsmi.main.NvSMI;
 import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
+import goliathenviousfx.custom.Space;
 import goliathenviousfx.custom.Tile;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.TilePane;
@@ -42,14 +44,16 @@ public class OverviewSectionPane extends SectionContentPane
     {
         super(g.getTargetString() + " Overview");
         
+        DoubleBinding bind = super.widthProperty().multiply(.85);
+
         flowPane = new TilePane();
         flowPane.setStyle("-fx-background-color: -fx-theme-header;");
         flowPane.setAlignment(Pos.CENTER_LEFT);
-        flowPane.setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE));
+        flowPane.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE));
         flowPane.setVgap(8*GoliathENVIOUSFX.SCALE);
         flowPane.setHgap(30*GoliathENVIOUSFX.SCALE);
-        flowPane.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        flowPane.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        flowPane.minWidthProperty().bind(bind);
+        flowPane.maxWidthProperty().bind(bind);
         
         Tile gpuNameTile = new Tile();
         gpuNameTile.addLabel(g.idProperty().get() + " Name");

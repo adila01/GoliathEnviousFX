@@ -92,7 +92,7 @@ public class LabeledSlider extends HBox
         }
     }
     
-        private class DefaultTextBoxHandler implements EventHandler<Event>
+    private class DefaultTextBoxHandler implements EventHandler<Event>
     {
         @Override
         public void handle(Event event)
@@ -109,11 +109,17 @@ public class LabeledSlider extends HBox
                 }
             }
 
+            if(this.isPartOf(Integer.parseInt(textBox.getText())))
+                return;
+            
             if(!attr.getController().get().getAllValues().isWithinRange(Integer.parseInt(textBox.getText())))
             {
+                System.out.print(Integer.parseInt(textBox.getText()));
+                System.out.print(!attr.getController().get().getAllValues().isWithinRange(Integer.parseInt(textBox.getText())));
                 textBox.setText(String.valueOf((int)slider.getValue()));
                 return;
             }
+            
             
             slider.setValue(Integer.valueOf(textBox.getText()));
             
@@ -128,6 +134,21 @@ public class LabeledSlider extends HBox
             {
                 
             }
-        } 
+        }
+        
+        private boolean isPartOf(int num)
+        {
+            boolean is = false;
+            
+            for(int i = 0; i < attr.getController().get().getAllValues().getAllInRange().size(); i++)
+            {
+                String str = String.valueOf(attr.getController().get().getAllValues().getAllInRange().get(i));
+                str = str.substring(0, str.length()-1);
+                int partVal = Integer.parseInt(str);
+                if(partVal == num)
+                    is = true;
+            }
+            return is;
+        }
     }
 }

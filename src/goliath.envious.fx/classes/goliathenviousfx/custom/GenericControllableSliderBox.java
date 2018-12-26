@@ -60,7 +60,7 @@ public class GenericControllableSliderBox extends VBox
         buttonBox.getChildren().add(apply);
         buttonBox.getChildren().add(reset);
         
-        Label title = new Label(rdbl.displayNameProperty().get());
+        Label title = new Label(rdbl.displayNameProperty().get() + "(" + rdbl.getMeasurement() + ")");
         title.setAlignment(Pos.CENTER_LEFT);
         
         super.getChildren().add(title);

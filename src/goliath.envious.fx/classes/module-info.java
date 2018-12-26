@@ -5,6 +5,7 @@ module goliath.envious.fx
     requires goliath.envious;
     requires goliath.nvsettings;
     requires goliath.nvsmi;
+    requires goliath.nvxconfig;
     requires goliath.css;
     
     exports goliathenviousfx;

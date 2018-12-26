@@ -31,6 +31,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class Tile extends VBox
 {   
@@ -49,6 +51,8 @@ public class Tile extends VBox
     public void setNvReadable(ReadOnlyNvReadable rdbl)
     {
         super.getChildren().add(new Label(rdbl.displayNameProperty().get()));
+        ((Label)super.getChildren().get(0)).setFont(Font.font(Font.getDefault().getFamily(), FontWeight.EXTRA_BOLD, GoliathENVIOUSFX.FONT.getSize()));
+        
         
         Label lb = new Label(rdbl.displayValueProperty().get());
         rdbl.displayValueProperty().addListener(new ReadableBinder());

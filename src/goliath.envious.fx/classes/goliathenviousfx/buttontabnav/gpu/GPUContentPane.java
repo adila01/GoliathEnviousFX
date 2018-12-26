@@ -32,8 +32,11 @@ public class GPUContentPane extends ContentPane
     {
         super();
         
-        super.getChildren().add(new NvSettingsSectionPane(NvSettings.getPrimaryGPU()));
-        super.getChildren().add(new PowerMizerSectionPane(NvSettings.getPrimaryGPU()));
-        super.getChildren().add(new OverclockingSectionPane(NvSettings.getPrimaryGPU()));
+        for(int i = 0; i < NvSettings.getGPUS().size(); i++)
+        {
+            super.getChildren().add(new NvSettingsSectionPane(NvSettings.getGPUS().get(i)));
+            super.getChildren().add(new PowerMizerSectionPane(NvSettings.getGPUS().get(i)));
+            super.getChildren().add(new OverclockingSectionPane(NvSettings.getGPUS().get(i)));
+        }
     }
 }

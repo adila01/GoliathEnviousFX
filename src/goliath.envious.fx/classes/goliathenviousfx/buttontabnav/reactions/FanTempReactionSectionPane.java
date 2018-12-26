@@ -21,31 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package goliathenviousfx.buttontabnav.smi;
+package goliathenviousfx.buttontabnav.reactions;
 
-import goliath.nvsmi.main.NvSMI;
+import goliath.nvsettings.targets.NvSettingsGPU;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.GenericControllableSliderBox;
-import goliathenviousfx.custom.GenericReadableTablePane;
+import goliathenviousfx.custom.ReactionSliderBox;
 import javafx.beans.binding.DoubleBinding;
 
-public class SMISectionPane extends SectionContentPane
+public class FanTempReactionSectionPane extends SectionContentPane
 {
-    private final GenericReadableTablePane smiTable;
-    private final GenericControllableSliderBox powerSlider;
+    private final ReactionSliderBox tempReaction;
     
-    public SMISectionPane()
+    public FanTempReactionSectionPane(NvSettingsGPU g)
     {
-        super("NvSMI Info & Control");
+        super(g.getTargetString() + " Temperature Fan Speed Reaction");
         
-        smiTable = new GenericReadableTablePane(NvSMI.READABLES);
         DoubleBinding bind = super.widthProperty().multiply(.85);
+        tempReaction = new ReactionSliderBox("Set the GPU's Fan Speed to the GPU's Temperature using an optional offset.\n\nThe Fan Mode must be set to Manual for this Reaction.", g.getCoreTemp(), g.getFan().getFanTargetSpeed().getController().get());
+        tempReaction.minWidthProperty().bind(bind);
+        tempReaction.maxWidthProperty().bind(bind);
         
-        powerSlider = new GenericControllableSliderBox(NvSMI.getPowerLimit());
-        powerSlider.minWidthProperty().bind(bind);
-        powerSlider.maxWidthProperty().bind(bind);
-        
-        super.getChildren().add(smiTable);
-        super.getChildren().add(powerSlider);
+        super.getChildren().add(tempReaction);
     }
 }

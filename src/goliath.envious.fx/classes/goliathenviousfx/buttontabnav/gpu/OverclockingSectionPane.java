@@ -29,6 +29,7 @@ import goliathenviousfx.custom.GenericControllableSliderBox;
 import goliathenviousfx.custom.Space;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.binding.DoubleBinding;
 
 public class OverclockingSectionPane extends SectionContentPane
 { 
@@ -45,33 +46,33 @@ public class OverclockingSectionPane extends SectionContentPane
         gpu = g;
         
         spaces = new ArrayList<>();
+        DoubleBinding bind = super.widthProperty().multiply(.85);
         
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 2; i++)
         {
             spaces.add(new Space(false));
             spaces.get(i).minHeightProperty().bind(super.heightProperty().multiply(.003));
             spaces.get(i).maxHeightProperty().bind(super.heightProperty().multiply(.005));
-            spaces.get(i).minWidthProperty().bind(super.widthProperty().multiply(.85));
-            spaces.get(i).maxWidthProperty().bind(super.widthProperty().multiply(.85));
+            spaces.get(i).minWidthProperty().bind(bind);
+            spaces.get(i).maxWidthProperty().bind(bind);
         }
         
         coreControl = new GenericControllableSliderBox(g.getCoreOffset());
-        coreControl.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        coreControl.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        coreControl.minWidthProperty().bind(bind);
+        coreControl.maxWidthProperty().bind(bind);
         
         memoryControl = new GenericControllableSliderBox(g.getMemoryOffset());
-        memoryControl.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        memoryControl.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        memoryControl.minWidthProperty().bind(bind);
+        memoryControl.maxWidthProperty().bind(bind);
         
         voltageControl = new GenericControllableSliderBox(g.getVoltageOffset());
-        voltageControl.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        voltageControl.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        voltageControl.minWidthProperty().bind(bind);
+        voltageControl.maxWidthProperty().bind(bind);
 
-        super.getChildren().add(spaces.get(0));
         super.getChildren().add(coreControl);
-        super.getChildren().add(spaces.get(1));
+        super.getChildren().add(spaces.get(0));
         super.getChildren().add(memoryControl);
-        super.getChildren().add(spaces.get(2));
+        super.getChildren().add(spaces.get(1));
         super.getChildren().add(voltageControl);
     }
 }

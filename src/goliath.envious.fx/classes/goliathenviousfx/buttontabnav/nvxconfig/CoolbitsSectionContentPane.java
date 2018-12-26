@@ -21,31 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package goliathenviousfx.buttontabnav.smi;
+package goliathenviousfx.buttontabnav.nvxconfig;
 
-import goliath.nvsmi.main.NvSMI;
+import goliath.nvxconfig.NvXConfig;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.GenericControllableSliderBox;
-import goliathenviousfx.custom.GenericReadableTablePane;
+import goliathenviousfx.custom.GenericComboEnumPane;
 import javafx.beans.binding.DoubleBinding;
 
-public class SMISectionPane extends SectionContentPane
+public class CoolbitsSectionContentPane extends SectionContentPane
 {
-    private final GenericReadableTablePane smiTable;
-    private final GenericControllableSliderBox powerSlider;
+    private final GenericComboEnumPane coolbitsPane;
     
-    public SMISectionPane()
+    public CoolbitsSectionContentPane()
     {
-        super("NvSMI Info & Control");
+        super("Coolbits Control");
         
-        smiTable = new GenericReadableTablePane(NvSMI.READABLES);
         DoubleBinding bind = super.widthProperty().multiply(.85);
         
-        powerSlider = new GenericControllableSliderBox(NvSMI.getPowerLimit());
-        powerSlider.minWidthProperty().bind(bind);
-        powerSlider.maxWidthProperty().bind(bind);
+        coolbitsPane = new GenericComboEnumPane(NvXConfig.getCoolbitsController());
+        coolbitsPane.minWidthProperty().bind(bind);
+        coolbitsPane.maxWidthProperty().bind(bind);
         
-        super.getChildren().add(smiTable);
-        super.getChildren().add(powerSlider);
+        super.getChildren().add(coolbitsPane);
     }
 }

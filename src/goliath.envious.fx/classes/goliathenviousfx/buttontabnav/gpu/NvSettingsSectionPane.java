@@ -29,6 +29,7 @@ import goliathenviousfx.custom.GenericComboEnumPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
 import goliathenviousfx.custom.GenericReadableTablePane;
 import goliathenviousfx.custom.Space;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 
 public class NvSettingsSectionPane extends SectionContentPane
@@ -47,19 +48,21 @@ public class NvSettingsSectionPane extends SectionContentPane
         tablePane = new GenericReadableTablePane(gpu.getNvReadables());
         tablePane.setAlignment(Pos.CENTER);
         
+        DoubleBinding bind = super.widthProperty().multiply(.85);
+        
         logoBrightnesControl = new GenericControllableSliderBox(g.getLogoBrightness());
-        logoBrightnesControl.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        logoBrightnesControl.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        logoBrightnesControl.minWidthProperty().bind(bind);
+        logoBrightnesControl.maxWidthProperty().bind(bind);
         
         fanModeControl = new GenericComboEnumPane(g.getFanMode());
-        fanModeControl.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        fanModeControl.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        fanModeControl.minWidthProperty().bind(bind);
+        fanModeControl.maxWidthProperty().bind(bind);
         
         Space space = new Space(false);
         space.minHeightProperty().bind(super.heightProperty().multiply(.003));
         space.maxHeightProperty().bind(super.heightProperty().multiply(.005));
-        space.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        space.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        space.minWidthProperty().bind(bind);
+        space.maxWidthProperty().bind(bind);
         
         super.getChildren().add(tablePane);
         super.getChildren().add(logoBrightnesControl);
