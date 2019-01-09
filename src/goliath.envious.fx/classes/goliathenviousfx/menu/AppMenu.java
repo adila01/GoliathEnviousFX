@@ -24,6 +24,7 @@
 package goliathenviousfx.menu;
 
 import goliath.envious.exceptions.ControllerResetFailedException;
+import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
 import goliathenviousfx.menu.items.ResetMenu;
 import javafx.event.Event;
@@ -61,7 +62,7 @@ public class AppMenu extends MenuBar
         {
             try
             {
-                NvSettings.getPrimaryGPU().resetControllables();
+                NvSettings.getInstance(NvGPU.getPrimaryNvGPU()).resetControllables();
             }
             catch (ControllerResetFailedException ex)
             {

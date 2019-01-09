@@ -19,12 +19,12 @@ public class ResetMenu extends Menu
         super.getItems().add(new MenuItem("All"));
         super.getItems().get(0).setOnAction(new ResetAllHandler());
         
-        for(int i = 0; i < NvSettings.getPrimaryGPU().getControllableAttributes().size(); i++)
+        for(int i = 0; i < NvSettings.getPrimaryInstance().getControllableAttributes().size(); i++)
         {
-            if(NvSettings.getPrimaryGPU().getControllableAttributes().get(i).getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
+            if(NvSettings.getPrimaryInstance().getControllableAttributes().get(i).getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
             {
-                super.getItems().add(new MenuItem(NvSettings.getPrimaryGPU().getControllableAttributes().get(i).getControlName()));
-                super.getItems().get(super.getItems().size()-1).setOnAction(new ResetHandler(NvSettings.getPrimaryGPU().getControllableAttributes().get(i)));
+                super.getItems().add(new MenuItem(NvSettings.getPrimaryInstance().getControllableAttributes().get(i).getControlName()));
+                super.getItems().get(super.getItems().size()-1).setOnAction(new ResetHandler(NvSettings.getPrimaryInstance().getControllableAttributes().get(i)));
             }
         }
         
@@ -43,7 +43,7 @@ public class ResetMenu extends Menu
         {
             try
             {
-                NvSettings.getPrimaryGPU().resetControllables();
+                NvSettings.getPrimaryInstance().resetControllables();
             }
             catch (ControllerResetFailedException ex)
             {

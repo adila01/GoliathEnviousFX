@@ -36,7 +36,7 @@ public class ContentPane extends VBox
     public ContentPane()
     {
         super();
-        super.setSpacing(20*GoliathENVIOUSFX.SCALE);
+        super.setSpacing(30*GoliathENVIOUSFX.SCALE);
         super.setAlignment(Pos.TOP_CENTER);
         super.getStyleClass().add("hbox");
         

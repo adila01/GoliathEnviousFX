@@ -23,9 +23,6 @@ import javafx.scene.control.ToggleGroup;
 
 public class ReactionSliderBox extends VBox
 {
-    public static DoubleBinding BUTTON_HEIGHT;
-    public static DoubleBinding BUTTON_WIDTH;
-    
     private final HBox buttonBox;
     private final ToggleButton enable;
     private final ReadOnlyNvReadable<Integer> readable;
@@ -41,11 +38,8 @@ public class ReactionSliderBox extends VBox
         super.setSpacing(15);
         super.setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
         
-        if(BUTTON_HEIGHT == null)
-        {
-            BUTTON_HEIGHT = super.heightProperty().multiply(.17);
-            BUTTON_WIDTH = super.widthProperty().multiply(.1);
-        }
+        DoubleBinding buttonHeight = super.heightProperty().multiply(.17);
+        DoubleBinding buttonWidth = super.widthProperty().multiply(.1);
         
         readable = rdbl;
         readable.valueProperty().addListener(new ValueListener());
@@ -58,19 +52,23 @@ public class ReactionSliderBox extends VBox
         
         enable = new ToggleButton("Enable");
         enable.setOnMouseClicked(new EnableHandler());
-        enable.minWidthProperty().bind(BUTTON_WIDTH);
-        enable.maxWidthProperty().bind(BUTTON_WIDTH);
-        enable.minHeightProperty().bind(BUTTON_HEIGHT);
-        enable.maxHeightProperty().bind(BUTTON_HEIGHT);
+        enable.minWidthProperty().bind(buttonWidth);
+        enable.maxWidthProperty().bind(buttonWidth);
+        enable.minHeightProperty().bind(buttonHeight);
+        enable.maxHeightProperty().bind(buttonHeight);
         
         disable = new ToggleButton("Disable");
         disable.setOnMouseClicked(new DisableHandler());
         disable.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        disable.prefHeightProperty().bind(BUTTON_HEIGHT);
+        disable.minWidthProperty().bind(buttonWidth);
+        disable.maxWidthProperty().bind(buttonWidth);
+        disable.minHeightProperty().bind(buttonHeight);
+        disable.maxHeightProperty().bind(buttonHeight);
 
         ToggleGroup group = new ToggleGroup();
         group.getToggles().add(enable);
         group.getToggles().add(disable);
+        group.selectToggle(disable);
         
         buttonBox.getChildren().add(enable);
         buttonBox.getChildren().add(disable);
@@ -107,7 +105,7 @@ public class ReactionSliderBox extends VBox
                 {
                     if(Integer.sum(newValue, spinner.getValue()) > controller.getMaxValue())
                         controller.setValue(controller.getMaxValue());
-                    else if(Integer.sum(newValue, spinner.getValue()) > controller.getMinValue())
+                    else if(Integer.sum(newValue, spinner.getValue()) < controller.getMinValue())
                         controller.setValue(controller.getMinValue());
                     else
                         controller.setValue(Integer.sum(newValue, spinner.getValue()));

@@ -23,7 +23,7 @@
  */
 package goliathenviousfx.buttontabnav.reactions;
 
-import goliath.nvsettings.main.NvSettings;
+import goliath.envious.gpu.NvGPU;
 import goliathenviousfx.buttontabnav.ContentPane;
 
 public class ReactionContentPane extends ContentPane
@@ -33,6 +33,6 @@ public class ReactionContentPane extends ContentPane
         super();
         
         super.getChildren().add(new ReactionDescSectionContentPane());
-        super.getChildren().add(new FanTempReactionSectionPane(NvSettings.getPrimaryGPU()));
+        super.getChildren().add(new FanTempReactionSectionPane(NvGPU.getPrimaryNvGPU()));
     }
 }

@@ -35,15 +35,17 @@ import javafx.scene.text.FontWeight;
 
 public class SectionContentPane extends VBox
 {
-    public SectionContentPane(String title)
+    private final Label title;
+    
+    public SectionContentPane(String tlt)
     {
         super();
         super.setAlignment(Pos.CENTER);
 
-        super.getChildren().add(new Label(title));
+        title = new Label(tlt);
         
         DoubleBinding width = super.widthProperty().multiply(.85);
-        DoubleBinding height = super.heightProperty().multiply(.003);
+        DoubleBinding height = super.heightProperty().multiply(.001);
         
         Space space = new Space(false);
         space.minHeightProperty().bind(height);
@@ -51,13 +53,14 @@ public class SectionContentPane extends VBox
         space.minWidthProperty().bind(width);
         space.maxWidthProperty().bind(width);
         
-        super.getChildren().add(space);
+        title.setStyle("-fx-background-color: -fx-theme-header;");
+        title.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.EXTRA_BOLD, GoliathENVIOUSFX.FONT.getSize()));
+        title.setAlignment(Pos.CENTER);
+        title.setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
+        title.minWidthProperty().bind(width);
+        title.maxWidthProperty().bind(width);
         
-        ((Label)super.getChildren().get(0)).setStyle("-fx-background-color: -fx-theme-header;");
-        ((Label)super.getChildren().get(0)).setFont(Font.font(Font.getDefault().getFamily(), FontWeight.EXTRA_BOLD, GoliathENVIOUSFX.FONT.getSize()));
-        ((Label)super.getChildren().get(0)).setAlignment(Pos.CENTER);
-        ((Label)super.getChildren().get(0)).setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
-        ((Label)super.getChildren().get(0)).minWidthProperty().bind(width);
-        ((Label)super.getChildren().get(0)).maxWidthProperty().bind(width);
+        super.getChildren().add(title);
+        super.getChildren().add(space);
     }
 }

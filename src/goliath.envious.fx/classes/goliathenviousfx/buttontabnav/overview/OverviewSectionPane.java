@@ -24,11 +24,11 @@
 package goliathenviousfx.buttontabnav.overview;
 
 import goliath.envious.enums.OperationalStatus;
-import goliath.nvsettings.targets.NvSettingsGPU;
+import goliath.envious.gpu.NvGPU;
+import goliath.nvsettings.main.NvSettings;
 import goliath.nvsmi.main.NvSMI;
 import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.Space;
 import goliathenviousfx.custom.Tile;
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
@@ -37,10 +37,9 @@ import javafx.scene.layout.TilePane;
 
 public class OverviewSectionPane extends SectionContentPane
 {
-    private final NvSettingsGPU gpu;
     private final TilePane flowPane;
     
-    public OverviewSectionPane(NvSettingsGPU g)
+    public OverviewSectionPane(NvGPU g)
     {
         super(g.getTargetString() + " Overview");
         
@@ -49,66 +48,66 @@ public class OverviewSectionPane extends SectionContentPane
         flowPane = new TilePane();
         flowPane.setStyle("-fx-background-color: -fx-theme-header;");
         flowPane.setAlignment(Pos.CENTER_LEFT);
-        flowPane.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE));
+        flowPane.setPadding(new Insets(16*GoliathENVIOUSFX.SCALE,16*GoliathENVIOUSFX.SCALE,16*GoliathENVIOUSFX.SCALE,16*GoliathENVIOUSFX.SCALE));
         flowPane.setVgap(8*GoliathENVIOUSFX.SCALE);
-        flowPane.setHgap(30*GoliathENVIOUSFX.SCALE);
+        flowPane.setHgap(8*GoliathENVIOUSFX.SCALE);
         flowPane.minWidthProperty().bind(bind);
         flowPane.maxWidthProperty().bind(bind);
         
         Tile gpuNameTile = new Tile();
-        gpuNameTile.addLabel(g.idProperty().get() + " Name");
+        gpuNameTile.addLabel("Name");
         gpuNameTile.addLabel(g.nameProperty());
         
         Tile gpuTemp = new Tile();
-        gpuTemp.setNvReadable(g.getCoreTemp());
+        gpuTemp.setNvReadable(NvSettings.getInstance(g).getCoreTemp());
         
         Tile gpuIdTile = new Tile();
-        gpuIdTile.addLabel(g.idProperty().get() + " NvSettings ID");
+        gpuIdTile.addLabel("NvSettings ID");
         gpuIdTile.addLabel(g.idProperty());
         
         Tile gpuUUIDTile = new Tile();
-        gpuUUIDTile.setNvReadable(g.getUuid());
+        gpuUUIDTile.setNvReadable(NvSettings.getInstance(g).getUuid());
         
         Tile gpuCores = new Tile();
-        gpuCores.setNvReadable(g.getCUDACores()); 
+        gpuCores.setNvReadable(NvSettings.getInstance(g).getCUDACores()); 
         
         Tile coreUsage = new Tile();
-        coreUsage.setNvReadable(g.getCoreUsage()); 
+        coreUsage.setNvReadable(NvSettings.getInstance(g).getCoreUsage()); 
         
         Tile usedMemory = new Tile();
-        usedMemory.setNvReadable(g.getUsedGPUMemory()); 
+        usedMemory.setNvReadable(NvSettings.getInstance(g).getUsedGPUMemory()); 
         
         Tile coreClock = new Tile();
-        coreClock.setNvReadable(g.getCoreClock()); 
+        coreClock.setNvReadable(NvSettings.getInstance(g).getCoreClock()); 
         
         Tile memoryClock = new Tile();
-        memoryClock.setNvReadable(g.getMemoryClock()); 
+        memoryClock.setNvReadable(NvSettings.getInstance(g).getMemoryClock()); 
         
         Tile totalMemory = new Tile();
-        totalMemory.setNvReadable(g.getDedicatedMemory()); 
+        totalMemory.setNvReadable(NvSettings.getInstance(g).getDedicatedMemory()); 
 
         Tile memoryInterface = new Tile();
-        memoryInterface.setNvReadable(g.getMemoryInterface()); 
+        memoryInterface.setNvReadable(NvSettings.getInstance(g).getMemoryInterface()); 
         
         Tile memoryBandwidthUsage = new Tile();
-        memoryBandwidthUsage.setNvReadable(g.getMemoryUsage()); 
+        memoryBandwidthUsage.setNvReadable(NvSettings.getInstance(g).getMemoryUsage()); 
         
         Tile pcieGen = new Tile();
-        pcieGen.setNvReadable(g.getPCIeGen());
+        pcieGen.setNvReadable(NvSettings.getInstance(g).getPCIeGen());
 
         Tile pcieCurrentWidth = new Tile();
-        pcieCurrentWidth.setNvReadable(g.getPCIeCurrentWidth());
+        pcieCurrentWidth.setNvReadable(NvSettings.getInstance(g).getPCIeCurrentWidth());
         
         Tile pcieCurrentSpeed = new Tile();
-        pcieCurrentSpeed.setNvReadable(g.getPCIeCurrentSpeed());
+        pcieCurrentSpeed.setNvReadable(NvSettings.getInstance(g).getPCIeCurrentSpeed());
         
         Tile pcieUsage = new Tile();
-        pcieUsage.setNvReadable(g.getPCIeUsage());
+        pcieUsage.setNvReadable(NvSettings.getInstance(g).getPCIeUsage());
         
         Tile coreOCSupported = new Tile();
         coreOCSupported.addLabel("Overclocking Support");
         
-        if(g.getCoreOffset().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
+        if(NvSettings.getInstance(g).getCoreOffset().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
             coreOCSupported.addLabel("Enabled");
         else
             coreOCSupported.addLabel("Disabled");
@@ -116,7 +115,7 @@ public class OverviewSectionPane extends SectionContentPane
         Tile voltageSupport = new Tile();
         voltageSupport.addLabel("Voltage Support");
         
-        if(g.getVoltageOffset().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
+        if(NvSettings.getInstance(g).getVoltageOffset().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
             voltageSupport.addLabel("Enabled");
         else
             voltageSupport.addLabel("Disabled");
@@ -124,7 +123,7 @@ public class OverviewSectionPane extends SectionContentPane
         Tile fanControlSupport = new Tile();
         fanControlSupport.addLabel("Fan Control Support");
         
-        if(g.getFanMode().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
+        if(NvSettings.getInstance(g).getFanMode().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
             fanControlSupport.addLabel("Enabled");
         else
             fanControlSupport.addLabel("Disabled");
@@ -160,8 +159,6 @@ public class OverviewSectionPane extends SectionContentPane
         flowPane.getChildren().add(voltageSupport);
         flowPane.getChildren().add(fanControlSupport);
         flowPane.getChildren().add(powerLimitSupport);
-        
-        gpu = g;
         
         super.getChildren().add(flowPane);
     }

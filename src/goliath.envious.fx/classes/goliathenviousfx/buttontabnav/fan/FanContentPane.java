@@ -23,6 +23,7 @@
  */
 package goliathenviousfx.buttontabnav.fan;
 
+import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
 import goliathenviousfx.buttontabnav.ContentPane;
 
@@ -32,7 +33,7 @@ public class FanContentPane extends ContentPane
     {
         super();
         
-        for(int i = 0; i < NvSettings.getGPUS().size(); i++)
-            super.getChildren().add(new FanSectionPane(NvSettings.getGPUS().get(i).getFan()));
+        for(int i = 0; i < NvGPU.getGPUS().size(); i++)
+            super.getChildren().add(new FanSectionPane(NvSettings.getInstance(NvGPU.getGPUS().get(i)).getNvFan()));
     }
 }

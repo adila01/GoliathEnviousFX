@@ -23,36 +23,34 @@
  */
 package goliathenviousfx.buttontabnav.reactions;
 
+import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import javafx.beans.binding.DoubleBinding;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 public class ReactionDescSectionContentPane extends SectionContentPane
 {
     public ReactionDescSectionContentPane()
     {
-        super("NvReaction Description & Usage");
+        super("Envious Reactions Description & Usage");
         
-        DoubleBinding bind = super.widthProperty().multiply(.85);
+        DoubleBinding widthBind = super.widthProperty().multiply(.85);
         
-        Label label = new Label();
-        label.setAlignment(Pos.CENTER);
-        label.minWidthProperty().bind(bind);
-        label.maxWidthProperty().bind(bind);
-        label.maxHeightProperty().bind(super.widthProperty());
-        label.setPadding(new Insets(8,8,8,8));
-        label.setStyle("-fx-background-color: -fx-theme-header;");
+        TextArea area = new TextArea();
+        area.setFocusTraversable(false);
+        area.setEditable(false);
+        area.minWidthProperty().bind(widthBind);
+        area.maxWidthProperty().bind(widthBind);
+        area.setMinHeight(200*GoliathENVIOUSFX.SCALE);
         
-        label.setText("NvReactions is an advanced feature that allows binding of an NvAttribute to a controller of another NvAttribute.\n\n"
-                + "This allows for easy automated dynamic control over certain controllable NvAttribute(s) but can be dangerous.\n\n"
-                + "You may also optionally set a non-zero offset that can be used to manipulate the dependant NvAttribute.\n\n"
+        area.setText("Envious Reactions is an advanced feature that allows binding of GPU data to equal said data.\n\n"
+                + "This allows for easy automated dynamic control over certain controllable GPU attributes but can be dangerous.\n\n"
+                + "You may also optionally set a non-zero offset that can be used to manipulate the dependant GPU data.\n\n"
                 + "Some NvReactions may require you to change the values for other NvAttributes before they may be used.\n\n"
                 + "If the dependant NvAttribute and the specified offset is less/greater than the NvAttribute's controller's min/max\n\n"
                 + "then the min/max will be used instead.");
         
         
-        super.getChildren().add(label);
+        super.getChildren().add(area);
     }
 }

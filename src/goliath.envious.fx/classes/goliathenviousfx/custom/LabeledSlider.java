@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.GoliathENVIOUSFX;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 public class LabeledSlider extends HBox
 {
@@ -45,12 +47,13 @@ public class LabeledSlider extends HBox
         slider.setOnMouseReleased(new DefaultContSliderHandler());
         
         textBox = new TextField();
+        textBox.focusedProperty().addListener(new ValueValidatorListener());
         textBox.prefWidthProperty().bind(super.widthProperty().multiply(.10));
         textBox.setEditable(true);
         
         textBox.setText(String.valueOf(attr.getCurrentValue()));
         
-        textBox.setOnKeyTyped(new DefaultTextBoxHandler());
+        //textBox.setOnKeyTyped(new DefaultTextBoxHandler());
         
         super.getChildren().add(slider);
         super.getChildren().add(textBox);
@@ -92,6 +95,27 @@ public class LabeledSlider extends HBox
         }
     }
     
+    private class ValueValidatorListener implements ChangeListener<Boolean>
+    {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+        {
+            if(newValue)
+                return;
+            
+            if(Integer.parseInt(textBox.getText()) > attr.getController().get().getAllValues().getMax())
+                textBox.setText(attr.getController().get().getAllValues().getMax().toString());
+            
+            if(Integer.parseInt(textBox.getText()) < attr.getController().get().getAllValues().getMin())
+                textBox.setText(attr.getController().get().getAllValues().getMin().toString());
+            
+            if(!attr.getController().get().getAllValues().isWithinRange(Integer.parseInt(textBox.getText())))
+                textBox.setText(attr.getCurrentValue().toString());
+            
+            slider.setValue(Integer.parseInt(textBox.getText()));
+        }
+    }
+    
     private class DefaultTextBoxHandler implements EventHandler<Event>
     {
         @Override
@@ -108,7 +132,7 @@ public class LabeledSlider extends HBox
                     return;
                 }
             }
-
+            
             if(this.isPartOf(Integer.parseInt(textBox.getText())))
                 return;
             
@@ -132,7 +156,7 @@ public class LabeledSlider extends HBox
             }
             catch (ValueSetFailedException ex)
             {
-                
+                ex.printStackTrace();
             }
         }
         

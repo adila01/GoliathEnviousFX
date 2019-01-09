@@ -25,7 +25,7 @@ package goliathenviousfx.custom;
 
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.GoliathENVIOUSFX;
-import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -53,7 +53,6 @@ public class Tile extends VBox
         super.getChildren().add(new Label(rdbl.displayNameProperty().get()));
         ((Label)super.getChildren().get(0)).setFont(Font.font(Font.getDefault().getFamily(), FontWeight.EXTRA_BOLD, GoliathENVIOUSFX.FONT.getSize()));
         
-        
         Label lb = new Label(rdbl.displayValueProperty().get());
         rdbl.displayValueProperty().addListener(new ReadableBinder());
         
@@ -67,7 +66,7 @@ public class Tile extends VBox
     {
         super.getChildren().add(new Label(text));
     }
-    public void addLabel(Property<String> text)
+    public void addLabel(ReadOnlyStringProperty text)
     {
         Label label = new Label();
         label.textProperty().bind(text);

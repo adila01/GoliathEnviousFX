@@ -23,7 +23,8 @@
  */
 package goliathenviousfx.buttontabnav.gpu;
 
-import goliath.nvsettings.targets.NvSettingsGPU;
+import goliath.envious.gpu.NvGPU;
+import goliath.nvsettings.main.NvSettings;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
@@ -34,33 +35,34 @@ import javafx.geometry.Pos;
 
 public class NvSettingsSectionPane extends SectionContentPane
 {
-    private final NvSettingsGPU gpu;
     private final GenericReadableTablePane tablePane;
     private final GenericControllableSliderBox logoBrightnesControl;
     private final GenericComboEnumPane fanModeControl;
     
-    public NvSettingsSectionPane(NvSettingsGPU g)
+    public NvSettingsSectionPane(NvGPU g)
     {
         super(g.getTargetString() + " NvSettings Info & Control");
         
-        gpu = g;
-        
-        tablePane = new GenericReadableTablePane(gpu.getNvReadables());
+        DoubleBinding tableHeightBinding = super.heightProperty().multiply(.50);
+        tablePane = new GenericReadableTablePane(NvSettings.getInstance(g).getNvReadables());
+        tablePane.minHeightProperty().bind(tableHeightBinding);
+        tablePane.maxHeightProperty().bind(tableHeightBinding);
         tablePane.setAlignment(Pos.CENTER);
         
         DoubleBinding bind = super.widthProperty().multiply(.85);
         
-        logoBrightnesControl = new GenericControllableSliderBox(g.getLogoBrightness());
+        logoBrightnesControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getLogoBrightness());
         logoBrightnesControl.minWidthProperty().bind(bind);
         logoBrightnesControl.maxWidthProperty().bind(bind);
         
-        fanModeControl = new GenericComboEnumPane(g.getFanMode());
+        fanModeControl = new GenericComboEnumPane(NvSettings.getInstance(g).getFanMode());
         fanModeControl.minWidthProperty().bind(bind);
         fanModeControl.maxWidthProperty().bind(bind);
         
+        DoubleBinding spaceBind = super.heightProperty().multiply(.001);
         Space space = new Space(false);
-        space.minHeightProperty().bind(super.heightProperty().multiply(.003));
-        space.maxHeightProperty().bind(super.heightProperty().multiply(.005));
+        space.minHeightProperty().bind(spaceBind);
+        space.maxHeightProperty().bind(spaceBind);
         space.minWidthProperty().bind(bind);
         space.maxWidthProperty().bind(bind);
         

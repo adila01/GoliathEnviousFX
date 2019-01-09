@@ -23,28 +23,31 @@
  */
 package goliathenviousfx.buttontabnav.fan;
 
-import goliath.nvsettings.interfaces.Fan;
+import goliath.nvsettings.main.NvFan;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
 import goliathenviousfx.custom.GenericReadableTablePane;
+import javafx.beans.binding.DoubleBinding;
 
 public class FanSectionPane extends SectionContentPane
 {
-    private final Fan fan;
     private final GenericReadableTablePane tablePane;
     private final GenericControllableSliderBox speedController;
     
-    public FanSectionPane(Fan fn)
+    public FanSectionPane(NvFan fn)
     {
         super(fn.getTargetString() + " Info & Control");
         
-        fan = fn;
+        DoubleBinding widthBind = super.widthProperty().multiply(.85);
+        DoubleBinding heightBind = super.heightProperty().multiply(.50);
         
         tablePane = new GenericReadableTablePane(fn.getNvReadables());
+        tablePane.minHeightProperty().bind(heightBind);
+        tablePane.maxHeightProperty().bind(heightBind);
         
         speedController = new GenericControllableSliderBox(fn.getFanTargetSpeed());
-        speedController.minWidthProperty().bind(super.widthProperty().multiply(.85));
-        speedController.maxWidthProperty().bind(super.widthProperty().multiply(.85));
+        speedController.minWidthProperty().bind(widthBind);
+        speedController.maxWidthProperty().bind(widthBind);
         
         super.getChildren().add(tablePane);
         super.getChildren().add(speedController);

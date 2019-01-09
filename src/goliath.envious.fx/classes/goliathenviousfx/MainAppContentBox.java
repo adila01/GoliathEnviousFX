@@ -25,10 +25,11 @@ package goliathenviousfx;
 
 import goliathenviousfx.buttontabnav.ContentPane;
 import goliathenviousfx.buttontabnav.NavButton;
-import goliathenviousfx.buttontabnav.osd.AboutContentPane;
+import goliathenviousfx.buttontabnav.about.AboutContentPane;
 import goliathenviousfx.buttontabnav.fan.FanContentPane;
 import goliathenviousfx.buttontabnav.gpu.GPUContentPane;
 import goliathenviousfx.buttontabnav.nvxconfig.NvXConfigPane;
+import goliathenviousfx.buttontabnav.osd.OSDContentPane;
 import goliathenviousfx.buttontabnav.overview.OverviewContentPane;
 import goliathenviousfx.buttontabnav.reactions.ReactionContentPane;
 import goliathenviousfx.buttontabnav.smi.SMIContentPane;
@@ -75,8 +76,8 @@ public class MainAppContentBox extends HBox
         navButtons.add(new NavButton("Fan", new FanContentPane()));
         navButtons.add(new NavButton("NvSMI", new SMIContentPane()));
         navButtons.add(new NavButton("NvXConfig", new NvXConfigPane()));
-        navButtons.add(new NavButton("NvReactions", new ReactionContentPane()));
-        navButtons.add(new NavButton("On Screen Display", new ContentPane()));
+        navButtons.add(new NavButton("Envious Reactions", new ReactionContentPane()));
+        navButtons.add(new NavButton("On Screen Display", new OSDContentPane()));
         //navButtons.add(new NavButton("NvReactions", new ContentPane()));
         navButtons.add(new NavButton("About", new AboutContentPane()));
         

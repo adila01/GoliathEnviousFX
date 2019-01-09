@@ -23,7 +23,8 @@
  */
 package goliathenviousfx.buttontabnav.gpu;
 
-import goliath.nvsettings.targets.NvSettingsGPU;
+import goliath.envious.gpu.NvGPU;
+import goliath.nvsettings.main.NvSettings;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
 import goliathenviousfx.custom.Space;
@@ -33,39 +34,37 @@ import javafx.beans.binding.DoubleBinding;
 
 public class OverclockingSectionPane extends SectionContentPane
 { 
-    private final NvSettingsGPU gpu;
     private final List<Space> spaces;
     private final GenericControllableSliderBox coreControl;
     private final GenericControllableSliderBox memoryControl;
     private final GenericControllableSliderBox voltageControl;
     
-    public OverclockingSectionPane(NvSettingsGPU g)
+    public OverclockingSectionPane(NvGPU g)
     {
         super(g.getTargetString() + " Overclocking");
         
-        gpu = g;
-        
         spaces = new ArrayList<>();
         DoubleBinding bind = super.widthProperty().multiply(.85);
+        DoubleBinding spaceBinding = super.heightProperty().multiply(.001);
         
         for(int i = 0; i < 2; i++)
         {
             spaces.add(new Space(false));
-            spaces.get(i).minHeightProperty().bind(super.heightProperty().multiply(.003));
-            spaces.get(i).maxHeightProperty().bind(super.heightProperty().multiply(.005));
+            spaces.get(i).minHeightProperty().bind(spaceBinding);
+            spaces.get(i).maxHeightProperty().bind(spaceBinding);
             spaces.get(i).minWidthProperty().bind(bind);
             spaces.get(i).maxWidthProperty().bind(bind);
         }
         
-        coreControl = new GenericControllableSliderBox(g.getCoreOffset());
+        coreControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getCoreOffset());
         coreControl.minWidthProperty().bind(bind);
         coreControl.maxWidthProperty().bind(bind);
         
-        memoryControl = new GenericControllableSliderBox(g.getMemoryOffset());
+        memoryControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getMemoryOffset());
         memoryControl.minWidthProperty().bind(bind);
         memoryControl.maxWidthProperty().bind(bind);
         
-        voltageControl = new GenericControllableSliderBox(g.getVoltageOffset());
+        voltageControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getVoltageOffset());
         voltageControl.minWidthProperty().bind(bind);
         voltageControl.maxWidthProperty().bind(bind);
 

@@ -21,22 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package goliathenviousfx.buttontabnav.gpu;
+package goliathenviousfx.buttontabnav.about;
 
-import goliath.envious.gpu.NvGPU;
 import goliathenviousfx.buttontabnav.ContentPane;
 
-public class GPUContentPane extends ContentPane
+public class AboutContentPane extends ContentPane
 {
-    public GPUContentPane()
+    public AboutContentPane()
     {
         super();
         
-        for(int i = 0; i < NvGPU.getGPUS().size(); i++)
-        {
-            super.getChildren().add(new NvSettingsSectionPane(NvGPU.getGPUS().get(i)));
-            super.getChildren().add(new PowerMizerSectionPane(NvGPU.getGPUS().get(i)));
-            super.getChildren().add(new OverclockingSectionPane(NvGPU.getGPUS().get(i)));
-        }
+        super.getChildren().add(new AppSectionContentPane());
     }
 }

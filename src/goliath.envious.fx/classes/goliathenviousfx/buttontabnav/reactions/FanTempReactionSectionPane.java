@@ -23,24 +23,32 @@
  */
 package goliathenviousfx.buttontabnav.reactions;
 
-import goliath.nvsettings.targets.NvSettingsGPU;
+import goliath.envious.gpu.NvGPU;
+import goliath.nvsettings.main.NvSettings;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.ReactionSliderBox;
 import javafx.beans.binding.DoubleBinding;
 
 public class FanTempReactionSectionPane extends SectionContentPane
 {
-    private final ReactionSliderBox tempReaction;
+    private final ReactionSliderBox tempFanSpeedReaction;
+    private final ReactionSliderBox tempLogoBrightnessReaction;
     
-    public FanTempReactionSectionPane(NvSettingsGPU g)
+    public FanTempReactionSectionPane(NvGPU g)
     {
-        super(g.getTargetString() + " Temperature Fan Speed Reaction");
+        super(g.getTargetString() + " Temperature NvReactions");
         
         DoubleBinding bind = super.widthProperty().multiply(.85);
-        tempReaction = new ReactionSliderBox("Set the GPU's Fan Speed to the GPU's Temperature using an optional offset.\n\nThe Fan Mode must be set to Manual for this Reaction.", g.getCoreTemp(), g.getFan().getFanTargetSpeed().getController().get());
-        tempReaction.minWidthProperty().bind(bind);
-        tempReaction.maxWidthProperty().bind(bind);
         
-        super.getChildren().add(tempReaction);
+        tempFanSpeedReaction = new ReactionSliderBox("Set the GPU's Fan Speed to the GPU's Temperature using an optional offset.\n\nThe Fan Mode must be set to Manual for this reaction.", NvSettings.getInstance(g).getCoreTemp(), NvSettings.getInstance(g).getNvFan().getFanTargetSpeed().getController().get());
+        tempFanSpeedReaction.minWidthProperty().bind(bind);
+        tempFanSpeedReaction.maxWidthProperty().bind(bind);
+        
+        tempLogoBrightnessReaction = new ReactionSliderBox("Set the GPU's Logo Brightness to the GPU's Temperature using an optional offset.", NvSettings.getInstance(g).getCoreTemp(), NvSettings.getInstance(g).getLogoBrightness().getController().get());
+        tempLogoBrightnessReaction.minWidthProperty().bind(bind);
+        tempLogoBrightnessReaction.maxWidthProperty().bind(bind);
+        
+        super.getChildren().add(tempFanSpeedReaction);
+        super.getChildren().add(tempLogoBrightnessReaction);
     }
 }

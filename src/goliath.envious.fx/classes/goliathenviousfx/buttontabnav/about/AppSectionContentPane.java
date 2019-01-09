@@ -21,16 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package goliathenviousfx.buttontabnav.osd;
+package goliathenviousfx.buttontabnav.about;
 
-import goliathenviousfx.buttontabnav.ContentPane;
+import goliathenviousfx.GoliathENVIOUSFX;
+import goliathenviousfx.buttontabnav.SectionContentPane;
+import goliathenviousfx.custom.Space;
+import javafx.beans.binding.DoubleBinding;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 
-public class AboutContentPane extends ContentPane
+public class AppSectionContentPane extends SectionContentPane
 {
-    public AboutContentPane()
+    private final Label label;
+    
+    public AppSectionContentPane()
     {
-        super();
+        super("About Goliath Envious FX V1");
         
-        super.getChildren().add(new AppSectionContentPane());
+        DoubleBinding bind = super.widthProperty().multiply(.85);
+
+        label = new Label("Goliath Envious FX is a modern Java/JavaFX frontend for GoliathENVIOUS Linux Nvidia GPU overclocking library.");
+        label.setAlignment(Pos.CENTER);
+        label.minWidthProperty().bind(bind);
+        label.maxWidthProperty().bind(bind);
+        label.setStyle("-fx-background-color: -fx-theme-header;");
+        label.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE));
+        
+        super.getChildren().add(label);
     }
 }

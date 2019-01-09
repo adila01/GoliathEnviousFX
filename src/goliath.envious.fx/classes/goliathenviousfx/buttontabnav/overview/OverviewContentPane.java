@@ -23,7 +23,7 @@
  */
 package goliathenviousfx.buttontabnav.overview;
 
-import goliath.nvsettings.main.NvSettings;
+import goliath.envious.gpu.NvGPU;
 import goliathenviousfx.buttontabnav.ContentPane;
 import javafx.beans.binding.DoubleBinding;
 
@@ -37,9 +37,9 @@ public class OverviewContentPane extends ContentPane
         
         DoubleBinding bind = super.widthProperty().multiply(.85);
         
-        for(int i = 0; i < NvSettings.getGPUS().size(); i++)
+        for(int i = 0; i < NvGPU.getGPUS().size(); i++)
         {
-            overviewPane = new OverviewSectionPane(NvSettings.getGPUS().get(i));
+            overviewPane = new OverviewSectionPane(NvGPU.getGPUS().get(i));
             overviewPane.minWidthProperty().add(bind);
             overviewPane.maxWidthProperty().add(bind);
         

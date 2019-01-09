@@ -23,10 +23,9 @@
  */
 package goliathenviousfx.buttontabnav.gpu;
 
+import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsettings.performance.PerformanceLevel;
-import goliath.nvsettings.targets.NvSettingsGPU;
-import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
 import javafx.beans.binding.DoubleBinding;
@@ -39,7 +38,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class PowerMizerSectionPane extends SectionContentPane
 {
-    private final NvSettingsGPU gpu;
+    private final NvGPU gpu;
     private final TableView<PerformanceLevel> table;
     private final TableColumn<PerformanceLevel, Integer> perfLevel;
     private final TableColumn<PerformanceLevel, Integer> minClock;
@@ -49,23 +48,23 @@ public class PowerMizerSectionPane extends SectionContentPane
     
     private final GenericComboEnumPane comboPane;
     
-    public PowerMizerSectionPane(NvSettingsGPU g)
+    public PowerMizerSectionPane(NvGPU g)
     {
-        
         super(g.getTargetString() + " PowerMizer Info & Control");
-        //super.widthProperty().addListener(new ContentSizer());
+        
         gpu = g;
         
-        DoubleBinding bind = super.widthProperty().multiply(.85);
+        DoubleBinding widthBind = super.widthProperty().multiply(.85);
+        DoubleBinding heightBind = super.heightProperty().multiply(.50);
         
-        table = new TableView<>(FXCollections.observableArrayList(g.getPerfModes().getCurrentValue()));
+        table = new TableView<>(FXCollections.observableArrayList(NvSettings.getInstance(g).getPerfModes().getCurrentValue()));
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setMouseTransparent(true);
         table.setEditable(false);
-        table.minWidthProperty().bind(bind);
-        table.maxWidthProperty().bind(bind);
-        table.setMinHeight(124*GoliathENVIOUSFX.SCALE);
-        table.setMaxHeight(124*GoliathENVIOUSFX.SCALE);
+        table.minWidthProperty().bind(widthBind);
+        table.maxWidthProperty().bind(widthBind);
+        table.minHeightProperty().bind(heightBind);
+        table.maxHeightProperty().bind(heightBind);
         
         perfLevel = new TableColumn<>("Performance Level");
         perfLevel.setCellValueFactory(new PropertyValueFactory<>("level"));
@@ -83,32 +82,24 @@ public class PowerMizerSectionPane extends SectionContentPane
         maxClock.setSortable(false);
         
         minMemory = new TableColumn<>("Min Memory(MHz)");
-        
-        if(NvSettings.getDisableExtraAbstraction())
-            minMemory.setCellValueFactory(new PropertyValueFactory<>("transferMin"));
-        else
-            minMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMin"));
+        minMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMin"));
         
         minMemory.setEditable(false);
         minMemory.setSortable(false);
         
         maxMemory = new TableColumn<>("Max Memory(MHz)");
         maxMemory.setEditable(false);
-        
-        if(NvSettings.getDisableExtraAbstraction())
-            maxMemory.setCellValueFactory(new PropertyValueFactory<>("transferMax"));
-        else
-            maxMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMax"));
+        maxMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMax"));
         
         maxMemory.setSortable(false);
         table.getColumns().addAll(perfLevel, minClock, maxClock, minMemory, maxMemory);
                 
-        gpu.getCurrentPerformanceLevel().valueProperty().addListener(new ValueListener());
-        table.getSelectionModel().select(gpu.getCurrentPerformanceLevel().getCurrentValue());
+        NvSettings.getInstance(g).getCurrentPerformanceLevel().valueProperty().addListener(new ValueListener());
+        table.getSelectionModel().select(NvSettings.getInstance(g).getCurrentPerformanceLevel().getCurrentValue());
         
-        comboPane = new GenericComboEnumPane(g.getPowerMizer());
-        comboPane.minWidthProperty().bind(bind);
-        comboPane.maxWidthProperty().bind(bind);
+        comboPane = new GenericComboEnumPane(NvSettings.getInstance(g).getPowerMizer());
+        comboPane.minWidthProperty().bind(widthBind);
+        comboPane.maxWidthProperty().bind(widthBind);
         
         super.getChildren().add(table);
         super.getChildren().add(comboPane);
@@ -119,7 +110,7 @@ public class PowerMizerSectionPane extends SectionContentPane
         @Override
         public void changed(ObservableValue<? extends PerformanceLevel> observable, PerformanceLevel oldValue, PerformanceLevel newValue)
         {
-            table.getSelectionModel().select(gpu.getCurrentPerformanceLevel().getCurrentValue());
+            table.getSelectionModel().select(NvSettings.getInstance(gpu).getCurrentPerformanceLevel().getCurrentValue());
         }
     }
 }

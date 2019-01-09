@@ -38,7 +38,12 @@ public class SMISectionPane extends SectionContentPane
     {
         super("NvSMI Info & Control");
         
+        DoubleBinding heightBind = super.heightProperty().multiply(.50);
+        
         smiTable = new GenericReadableTablePane(NvSMI.READABLES);
+        smiTable.minHeightProperty().bind(heightBind);
+        smiTable.maxHeightProperty().bind(heightBind);
+        
         DoubleBinding bind = super.widthProperty().multiply(.85);
         
         powerSlider = new GenericControllableSliderBox(NvSMI.getPowerLimit());

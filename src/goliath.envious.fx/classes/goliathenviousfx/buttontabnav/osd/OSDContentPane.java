@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 ty.
+ * Copyright 2019 ty.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,18 @@
  */
 package goliathenviousfx.buttontabnav.osd;
 
-import goliathenviousfx.GoliathENVIOUSFX;
-import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.Space;
-import javafx.beans.binding.DoubleBinding;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import goliathenviousfx.buttontabnav.ContentPane;
 
-public class AppSectionContentPane extends SectionContentPane
+public class OSDContentPane extends ContentPane
 {
-    private final Label label;
+    private final OSDSectionContentPane osdPane;
     
-    public AppSectionContentPane()
+    public OSDContentPane()
     {
-        super("About Goliath Envious FX V1");
+        super();
         
-        DoubleBinding bind = super.widthProperty().multiply(.85);
-
-        label = new Label("Goliath Envious FX is a modern Java/JavaFX frontend for GoliathENVIOUS Linux Nvidia GPU overclocking library.");
-        label.setAlignment(Pos.CENTER);
-        label.minWidthProperty().bind(bind);
-        label.maxWidthProperty().bind(bind);
-        label.setStyle("-fx-background-color: -fx-theme-header;");
-        label.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE));
+        osdPane = new OSDSectionContentPane();
         
-        super.getChildren().add(label);
+        super.getChildren().add(osdPane);
     }
 }
