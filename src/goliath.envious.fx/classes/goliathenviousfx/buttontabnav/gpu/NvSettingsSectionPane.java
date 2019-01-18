@@ -25,17 +25,18 @@ package goliathenviousfx.buttontabnav.gpu;
 
 import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
+import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
-import goliathenviousfx.custom.GenericReadableTablePane;
+import goliathenviousfx.custom.GenericReadableTable;
 import goliathenviousfx.custom.Space;
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 
 public class NvSettingsSectionPane extends SectionContentPane
 {
-    private final GenericReadableTablePane tablePane;
+    private final GenericReadableTable tablePane;
     private final GenericControllableSliderBox logoBrightnesControl;
     private final GenericComboEnumPane fanModeControl;
     
@@ -43,33 +44,22 @@ public class NvSettingsSectionPane extends SectionContentPane
     {
         super(g.getTargetString() + " NvSettings Info & Control");
         
-        DoubleBinding tableHeightBinding = super.heightProperty().multiply(.50);
-        tablePane = new GenericReadableTablePane(NvSettings.getInstance(g).getNvReadables());
-        tablePane.minHeightProperty().bind(tableHeightBinding);
-        tablePane.maxHeightProperty().bind(tableHeightBinding);
-        tablePane.setAlignment(Pos.CENTER);
-        
-        DoubleBinding bind = super.widthProperty().multiply(.85);
+        tablePane = new GenericReadableTable(NvSettings.getInstance(g).getNvReadables());
+        tablePane.setMinHeight(250*GoliathENVIOUSFX.SCALE);
+        tablePane.setMaxHeight(250*GoliathENVIOUSFX.SCALE);
         
         logoBrightnesControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getLogoBrightness());
-        logoBrightnesControl.minWidthProperty().bind(bind);
-        logoBrightnesControl.maxWidthProperty().bind(bind);
         
         fanModeControl = new GenericComboEnumPane(NvSettings.getInstance(g).getFanMode());
-        fanModeControl.minWidthProperty().bind(bind);
-        fanModeControl.maxWidthProperty().bind(bind);
         
-        DoubleBinding spaceBind = super.heightProperty().multiply(.001);
         Space space = new Space(false);
-        space.minHeightProperty().bind(spaceBind);
-        space.maxHeightProperty().bind(spaceBind);
-        space.minWidthProperty().bind(bind);
-        space.maxWidthProperty().bind(bind);
+        space.setMinHeight(1*GoliathENVIOUSFX.SCALE);
+        space.setMaxHeight(1*GoliathENVIOUSFX.SCALE);
         
-        super.getChildren().add(tablePane);
-        super.getChildren().add(logoBrightnesControl);
-        super.getChildren().add(space);
-        super.getChildren().add(fanModeControl);
+        super.add(tablePane, 0, super.getRowCount());
+        super.add(logoBrightnesControl, 0, super.getRowCount());
+        super.add(space, 0, super.getRowCount());
+        super.add(fanModeControl, 0, super.getRowCount());
     }
     
 }

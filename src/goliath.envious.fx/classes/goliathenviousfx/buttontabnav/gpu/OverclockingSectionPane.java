@@ -25,12 +25,12 @@ package goliathenviousfx.buttontabnav.gpu;
 
 import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
+import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
 import goliathenviousfx.custom.Space;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.binding.DoubleBinding;
 
 public class OverclockingSectionPane extends SectionContentPane
 { 
@@ -44,34 +44,24 @@ public class OverclockingSectionPane extends SectionContentPane
         super(g.getTargetString() + " Overclocking");
         
         spaces = new ArrayList<>();
-        DoubleBinding bind = super.widthProperty().multiply(.85);
-        DoubleBinding spaceBinding = super.heightProperty().multiply(.001);
         
         for(int i = 0; i < 2; i++)
         {
             spaces.add(new Space(false));
-            spaces.get(i).minHeightProperty().bind(spaceBinding);
-            spaces.get(i).maxHeightProperty().bind(spaceBinding);
-            spaces.get(i).minWidthProperty().bind(bind);
-            spaces.get(i).maxWidthProperty().bind(bind);
+            spaces.get(i).setMinHeight(1*GoliathENVIOUSFX.SCALE);
+            spaces.get(i).setMaxHeight(1*GoliathENVIOUSFX.SCALE);
         }
         
         coreControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getCoreOffset());
-        coreControl.minWidthProperty().bind(bind);
-        coreControl.maxWidthProperty().bind(bind);
         
         memoryControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getMemoryOffset());
-        memoryControl.minWidthProperty().bind(bind);
-        memoryControl.maxWidthProperty().bind(bind);
         
         voltageControl = new GenericControllableSliderBox(NvSettings.getInstance(g).getVoltageOffset());
-        voltageControl.minWidthProperty().bind(bind);
-        voltageControl.maxWidthProperty().bind(bind);
 
-        super.getChildren().add(coreControl);
-        super.getChildren().add(spaces.get(0));
-        super.getChildren().add(memoryControl);
-        super.getChildren().add(spaces.get(1));
-        super.getChildren().add(voltageControl);
+        super.add(coreControl, 0, super.getRowCount());
+        super.add(spaces.get(0), 0, super.getRowCount());
+        super.add(memoryControl, 0, super.getRowCount());
+        super.add(spaces.get(1), 0, super.getRowCount());
+        super.add(voltageControl, 0, super.getRowCount());
     }
 }

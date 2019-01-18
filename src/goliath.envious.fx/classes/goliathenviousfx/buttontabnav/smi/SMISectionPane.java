@@ -24,33 +24,27 @@
 package goliathenviousfx.buttontabnav.smi;
 
 import goliath.nvsmi.main.NvSMI;
+import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
-import goliathenviousfx.custom.GenericReadableTablePane;
-import javafx.beans.binding.DoubleBinding;
+import goliathenviousfx.custom.GenericReadableTable;
 
 public class SMISectionPane extends SectionContentPane
 {
-    private final GenericReadableTablePane smiTable;
+    private final GenericReadableTable smiTable;
     private final GenericControllableSliderBox powerSlider;
     
     public SMISectionPane()
     {
         super("NvSMI Info & Control");
-        
-        DoubleBinding heightBind = super.heightProperty().multiply(.50);
-        
-        smiTable = new GenericReadableTablePane(NvSMI.READABLES);
-        smiTable.minHeightProperty().bind(heightBind);
-        smiTable.maxHeightProperty().bind(heightBind);
-        
-        DoubleBinding bind = super.widthProperty().multiply(.85);
+
+        smiTable = new GenericReadableTable(NvSMI.READABLES);
+        smiTable.setMinHeight(125*GoliathENVIOUSFX.SCALE);
+        smiTable.setMaxHeight(125*GoliathENVIOUSFX.SCALE);
         
         powerSlider = new GenericControllableSliderBox(NvSMI.getPowerLimit());
-        powerSlider.minWidthProperty().bind(bind);
-        powerSlider.maxWidthProperty().bind(bind);
         
-        super.getChildren().add(smiTable);
-        super.getChildren().add(powerSlider);
+        super.add(smiTable, 0, super.getRowCount());
+        super.add(powerSlider, 0, super.getRowCount());
     }
 }

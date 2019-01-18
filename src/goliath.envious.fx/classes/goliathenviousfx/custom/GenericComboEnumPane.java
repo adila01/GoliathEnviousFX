@@ -30,6 +30,7 @@ import goliath.envious.interfaces.NvControllable;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.AppStatusBar;
 import goliathenviousfx.GoliathENVIOUSFX;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -67,15 +68,15 @@ public class GenericComboEnumPane<E> extends BorderPane
         combo = new ComboBox<>(FXCollections.observableArrayList(rdbl.getController().get().getAllValues().getAllInRange()));
         combo.getSelectionModel().select(rdbl.getCurrentValue());
         
+        DoubleBinding widthBinding = super.widthProperty().multiply(.1);
+        
         apply = new Button("Apply");
         apply.setOnMouseClicked(new ApplyHandler());
-        apply.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        apply.prefHeightProperty().bind(super.heightProperty().multiply(.25));
+        apply.prefWidthProperty().bind(widthBinding);
         
         reset = new Button("Reset");
         reset.setOnMouseClicked(new ResetHandler());
-        reset.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        reset.prefHeightProperty().bind(super.heightProperty().multiply(.25));
+        reset.prefWidthProperty().bind(widthBinding);
         
         if(!rdbl.getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
         {

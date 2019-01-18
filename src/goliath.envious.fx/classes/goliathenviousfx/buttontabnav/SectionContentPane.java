@@ -29,38 +29,47 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class SectionContentPane extends VBox
+public class SectionContentPane extends GridPane
 {
     private final Label title;
+    private final DoubleBinding contentWidthBinding;
     
     public SectionContentPane(String tlt)
     {
         super();
         super.setAlignment(Pos.CENTER);
 
+        ColumnConstraints conWidthContent = new ColumnConstraints();
+        conWidthContent.setPercentWidth(95);
+        
+        super.getColumnConstraints().add(conWidthContent);
+        
         title = new Label(tlt);
         
-        DoubleBinding width = super.widthProperty().multiply(.85);
-        DoubleBinding height = super.heightProperty().multiply(.001);
+        contentWidthBinding = super.widthProperty().multiply(1);
         
         Space space = new Space(false);
-        space.minHeightProperty().bind(height);
-        space.maxHeightProperty().bind(height);
-        space.minWidthProperty().bind(width);
-        space.maxWidthProperty().bind(width);
+        space.setMinHeight(1*GoliathENVIOUSFX.SCALE);
+        space.setMaxWidth(1*GoliathENVIOUSFX.SCALE);
         
         title.setStyle("-fx-background-color: -fx-theme-header;");
+        title.setPrefWidth(Integer.MAX_VALUE);
+        //title.prefWidthProperty().bind(contentWidthBinding);
         title.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.EXTRA_BOLD, GoliathENVIOUSFX.FONT.getSize()));
         title.setAlignment(Pos.CENTER);
         title.setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
-        title.minWidthProperty().bind(width);
-        title.maxWidthProperty().bind(width);
         
-        super.getChildren().add(title);
-        super.getChildren().add(space);
+        super.add(title, 0, 0);
+        super.add(space, 0, 1);
+    }
+    
+    public DoubleBinding getContentWidthBinding()
+    {
+        return contentWidthBinding;
     }
 }

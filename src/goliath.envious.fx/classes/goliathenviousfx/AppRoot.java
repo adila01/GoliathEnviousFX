@@ -23,7 +23,9 @@
  */
 package goliathenviousfx;
 
+import goliathenviousfx.custom.Space;
 import goliathenviousfx.menu.AppMenu;
+import javafx.beans.binding.DoubleBinding;
 import javafx.scene.layout.VBox;
 
 public class AppRoot extends VBox
@@ -40,13 +42,31 @@ public class AppRoot extends VBox
     public AppRoot()
     {
         super();
+        super.setFillWidth(true);
+        
         INSTANCE = this;
         
         menuBar = new AppMenu();
         
-
+        
+        DoubleBinding heightBinding = super.heightProperty().multiply(.001);
+        
+        Space topSpace = new Space(false);
+        topSpace.minHeightProperty().bind(heightBinding);
+        topSpace.maxHeightProperty().bind(heightBinding);
+        topSpace.minWidthProperty().bind(super.widthProperty());
+        topSpace.maxWidthProperty().bind(super.widthProperty());
+        
+        Space bottomSpace = new Space(false);
+        bottomSpace.minHeightProperty().bind(heightBinding);
+        bottomSpace.maxHeightProperty().bind(heightBinding);
+        bottomSpace.minWidthProperty().bind(super.widthProperty());
+        bottomSpace.maxWidthProperty().bind(super.widthProperty());
+        
         super.getChildren().add(menuBar);
+        super.getChildren().add(topSpace);
         super.getChildren().add(new MainAppContentBox());
+        super.getChildren().add(bottomSpace);
         super.getChildren().add(new AppStatusBar());
     }
 }

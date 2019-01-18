@@ -25,8 +25,6 @@ package goliathenviousfx.buttontabnav.about;
 
 import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.Space;
-import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -38,16 +36,13 @@ public class AppSectionContentPane extends SectionContentPane
     public AppSectionContentPane()
     {
         super("About Goliath Envious FX V1");
-        
-        DoubleBinding bind = super.widthProperty().multiply(.85);
 
         label = new Label("Goliath Envious FX is a modern Java/JavaFX frontend for GoliathENVIOUS Linux Nvidia GPU overclocking library.");
+        label.prefWidthProperty().bind(super.getContentWidthBinding());
         label.setAlignment(Pos.CENTER);
-        label.minWidthProperty().bind(bind);
-        label.maxWidthProperty().bind(bind);
         label.setStyle("-fx-background-color: -fx-theme-header;");
         label.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE,8*GoliathENVIOUSFX.SCALE));
         
-        super.getChildren().add(label);
+        super.add(label, 0, super.getRowCount());
     }
 }

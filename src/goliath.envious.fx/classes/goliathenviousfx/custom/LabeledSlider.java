@@ -28,7 +28,7 @@ public class LabeledSlider extends HBox
         setValue = setVal;
 
         slider = new Slider();
-        slider.prefWidthProperty().bind(super.widthProperty().multiply(.90));
+        slider.prefWidthProperty().bind(super.widthProperty().multiply(.92));
         slider.getStyleClass().add("slider");
         
         if(!attribute.getController().isEmpty())
@@ -48,7 +48,7 @@ public class LabeledSlider extends HBox
         
         textBox = new TextField();
         textBox.focusedProperty().addListener(new ValueValidatorListener());
-        textBox.prefWidthProperty().bind(super.widthProperty().multiply(.10));
+        textBox.prefWidthProperty().bind(super.widthProperty().multiply(.08));
         textBox.setEditable(true);
         
         textBox.setText(String.valueOf(attr.getCurrentValue()));

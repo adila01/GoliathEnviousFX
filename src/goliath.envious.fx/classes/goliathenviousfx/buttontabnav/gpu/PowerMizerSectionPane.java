@@ -26,6 +26,7 @@ package goliathenviousfx.buttontabnav.gpu;
 import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsettings.performance.PerformanceLevel;
+import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
 import javafx.beans.binding.DoubleBinding;
@@ -54,17 +55,12 @@ public class PowerMizerSectionPane extends SectionContentPane
         
         gpu = g;
         
-        DoubleBinding widthBind = super.widthProperty().multiply(.85);
-        DoubleBinding heightBind = super.heightProperty().multiply(.50);
-        
         table = new TableView<>(FXCollections.observableArrayList(NvSettings.getInstance(g).getPerfModes().getCurrentValue()));
+        table.setMinHeight(125*GoliathENVIOUSFX.SCALE);
+        table.setMaxHeight(125*GoliathENVIOUSFX.SCALE);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setMouseTransparent(true);
         table.setEditable(false);
-        table.minWidthProperty().bind(widthBind);
-        table.maxWidthProperty().bind(widthBind);
-        table.minHeightProperty().bind(heightBind);
-        table.maxHeightProperty().bind(heightBind);
         
         perfLevel = new TableColumn<>("Performance Level");
         perfLevel.setCellValueFactory(new PropertyValueFactory<>("level"));
@@ -98,11 +94,9 @@ public class PowerMizerSectionPane extends SectionContentPane
         table.getSelectionModel().select(NvSettings.getInstance(g).getCurrentPerformanceLevel().getCurrentValue());
         
         comboPane = new GenericComboEnumPane(NvSettings.getInstance(g).getPowerMizer());
-        comboPane.minWidthProperty().bind(widthBind);
-        comboPane.maxWidthProperty().bind(widthBind);
         
-        super.getChildren().add(table);
-        super.getChildren().add(comboPane);
+        super.add(table, 0, super.getRowCount());
+        super.add(comboPane, 0, super.getRowCount());
     }
     
     private class ValueListener implements ChangeListener<PerformanceLevel>

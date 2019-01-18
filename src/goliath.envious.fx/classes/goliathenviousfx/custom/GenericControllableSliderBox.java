@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.AppStatusBar;
 import goliathenviousfx.GoliathENVIOUSFX;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -41,15 +42,16 @@ public class GenericControllableSliderBox extends VBox
         
         buttonBox.setSpacing(10*GoliathENVIOUSFX.SCALE);
         
+        DoubleBinding widthBinding = super.widthProperty().multiply(.1);
+        DoubleBinding heightBinding = super.heightProperty().multiply(.25);
+        
         apply = new Button("Apply");
         apply.setOnMouseClicked(new ApplyHandler());
-        apply.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        apply.prefHeightProperty().bind(super.heightProperty().multiply(.25));
+        apply.prefWidthProperty().bind(widthBinding);
         
         reset = new Button("Reset");
         reset.setOnMouseClicked(new ResetHandler());
-        reset.prefWidthProperty().bind(super.widthProperty().multiply(.1));
-        reset.prefHeightProperty().bind(super.heightProperty().multiply(.25));
+        reset.prefWidthProperty().bind(widthBinding);
 
         if(!rdbl.getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
         {

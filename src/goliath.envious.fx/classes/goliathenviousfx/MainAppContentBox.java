@@ -23,7 +23,6 @@
  */
 package goliathenviousfx;
 
-import goliathenviousfx.buttontabnav.ContentPane;
 import goliathenviousfx.buttontabnav.NavButton;
 import goliathenviousfx.buttontabnav.about.AboutContentPane;
 import goliathenviousfx.buttontabnav.fan.FanContentPane;
@@ -37,12 +36,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.DoubleBinding;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
-public class MainAppContentBox extends HBox
+public class MainAppContentBox extends GridPane
 {
     private final List<NavButton> navButtons;
     private final ScrollPane contentScroller;
@@ -52,23 +54,24 @@ public class MainAppContentBox extends HBox
     {
         super();
         super.prefHeightProperty().bind(AppRoot.getInstance().heightProperty());
+        super.minWidthProperty().bind(AppRoot.getInstance().widthProperty());
+        super.maxWidthProperty().bind(AppRoot.getInstance().widthProperty());
         
-        DoubleBinding buttonBind = super.widthProperty().multiply(.15);
+        DoubleBinding buttonWidthBind = super.widthProperty().multiply(.15);
+        DoubleBinding buttonHeightBind = super.heightProperty().multiply(.06);
         
         VBox buttonBox = new VBox();
-        buttonBox.minWidthProperty().bind(buttonBind);
-        buttonBox.maxWidthProperty().bind(buttonBind);
+        buttonBox.minWidthProperty().bind(buttonWidthBind);
+        buttonBox.maxWidthProperty().bind(buttonWidthBind);
         buttonBox.setStyle("-fx-background-color: -fx-theme-background-alt;");
         
         contentScroller = new ScrollPane();
-        contentScroller.prefWidthProperty().bind(super.widthProperty().multiply(.85));
-        contentScroller.maxWidthProperty().bind(super.widthProperty().multiply(.85));
         contentScroller.setFitToHeight(true);
         contentScroller.setFitToWidth(true);
+        //contentScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        //contentScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         contentScroller.setStyle("-fx-padding: 0; " +
         "-fx-background-insets: 0;");
-        contentScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        contentScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         
         navButtons = new ArrayList<>();
         navButtons.add(new NavButton("Overview", new OverviewContentPane()));
@@ -76,7 +79,7 @@ public class MainAppContentBox extends HBox
         navButtons.add(new NavButton("Fan", new FanContentPane()));
         navButtons.add(new NavButton("NvSMI", new SMIContentPane()));
         navButtons.add(new NavButton("NvXConfig", new NvXConfigPane()));
-        navButtons.add(new NavButton("Envious Reactions", new ReactionContentPane()));
+        navButtons.add(new NavButton("NvReactions", new ReactionContentPane()));
         navButtons.add(new NavButton("On Screen Display", new OSDContentPane()));
         //navButtons.add(new NavButton("NvReactions", new ContentPane()));
         navButtons.add(new NavButton("About", new AboutContentPane()));
@@ -86,10 +89,10 @@ public class MainAppContentBox extends HBox
         
         for(int i = 0; i < navButtons.size(); i++)
         {
-            navButtons.get(i).minHeightProperty().bind(super.heightProperty().multiply(.06));
-            navButtons.get(i).maxHeightProperty().bind(super.heightProperty().multiply(.06));
-            navButtons.get(i).minWidthProperty().bind(buttonBind);
-            navButtons.get(i).maxWidthProperty().bind(buttonBind);
+            navButtons.get(i).minHeightProperty().bind(buttonHeightBind);
+            navButtons.get(i).maxHeightProperty().bind(buttonHeightBind);
+            navButtons.get(i).minWidthProperty().bind(buttonWidthBind);
+            navButtons.get(i).maxWidthProperty().bind(buttonWidthBind);
             navButtons.get(i).setOnMouseClicked(new ViewSwitchHandler());
             navButtons.get(i).setOnMouseEntered(new MouseEnterHandler());
             navButtons.get(i).setOnMouseExited(new MouseExitHandler());
@@ -99,8 +102,25 @@ public class MainAppContentBox extends HBox
         selected = navButtons.get(0);
         selected.setStyle("-fx-background-color: -fx-theme-selected;");
         
-        super.getChildren().add(buttonBox);
-        super.getChildren().add(contentScroller);
+        ColumnConstraints conWidthButtons = new ColumnConstraints();
+        conWidthButtons.setPercentWidth(15);
+        
+        ColumnConstraints conWidthContent = new ColumnConstraints();
+        conWidthContent.setFillWidth(true);
+        
+        RowConstraints conHeightButtons = new RowConstraints();
+        conHeightButtons.setPercentHeight(100);
+        
+        RowConstraints conHeightContent = new RowConstraints();
+        conHeightButtons.setPercentHeight(100);
+        
+        super.getColumnConstraints().add(conWidthButtons);
+        super.getColumnConstraints().add(conWidthContent);
+        super.getRowConstraints().add(conHeightButtons);
+        super.getRowConstraints().add(conHeightContent);
+        
+        super.addColumn(0, buttonBox);
+        super.addColumn(1, contentScroller);
     }
     
     private class ViewSwitchHandler implements EventHandler<MouseEvent>

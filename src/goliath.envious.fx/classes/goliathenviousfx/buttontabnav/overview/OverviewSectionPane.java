@@ -42,8 +42,6 @@ public class OverviewSectionPane extends SectionContentPane
     public OverviewSectionPane(NvGPU g)
     {
         super(g.getTargetString() + " Overview");
-        
-        DoubleBinding bind = super.widthProperty().multiply(.85);
 
         flowPane = new TilePane();
         flowPane.setStyle("-fx-background-color: -fx-theme-header;");
@@ -51,8 +49,6 @@ public class OverviewSectionPane extends SectionContentPane
         flowPane.setPadding(new Insets(16*GoliathENVIOUSFX.SCALE,16*GoliathENVIOUSFX.SCALE,16*GoliathENVIOUSFX.SCALE,16*GoliathENVIOUSFX.SCALE));
         flowPane.setVgap(8*GoliathENVIOUSFX.SCALE);
         flowPane.setHgap(8*GoliathENVIOUSFX.SCALE);
-        flowPane.minWidthProperty().bind(bind);
-        flowPane.maxWidthProperty().bind(bind);
         
         Tile gpuNameTile = new Tile();
         gpuNameTile.addLabel("Name");
@@ -160,6 +156,6 @@ public class OverviewSectionPane extends SectionContentPane
         flowPane.getChildren().add(fanControlSupport);
         flowPane.getChildren().add(powerLimitSupport);
         
-        super.getChildren().add(flowPane);
+        super.add(flowPane, 0, super.getRowCount());
     }
 }

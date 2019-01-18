@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -36,6 +37,8 @@ public class GoliathENVIOUSFX extends Application
             }
         }
         
+        NvSettings.init();
+
         high = new AttributeUpdatesThread(new ArrayList<>(NvSettings.getInstance(NvGPU.getPrimaryNvGPU()).getHighUpdateFrequencyAttributes()), Thread.MAX_PRIORITY, 0);
         high.start();
         
@@ -59,15 +62,17 @@ public class GoliathENVIOUSFX extends Application
     {
         FONT = Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 13*SCALE);
         Scene scene = new Scene(new AppRoot());
+        scene.getRoot().setCache(true);
+        scene.getRoot().setCacheHint(CacheHint.SPEED);
         scene.getStylesheets().add("goliath/css/Goliath-Envy.css");
-        scene.getRoot().setStyle(" -fx-font-size: " + 13*SCALE + "px;");
+        scene.getRoot().setStyle(" -fx-font-size: " + Font.getDefault().getSize()*SCALE + "px;");
         
         stage.setScene(scene);
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.maximizedProperty().addListener(new StageResizeHandler());
         stage.setOpacity(.98);
-        stage.setMinWidth(1100*SCALE);
-        stage.setMinHeight(550*SCALE);
+        stage.setMinWidth(1000*SCALE);
+        stage.setMinHeight(500*SCALE);
         stage.setTitle("Goliath Envious FX V1");
         stage.show();
     }

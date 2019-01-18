@@ -28,28 +28,21 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
-import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 
-public class GenericReadableTablePane extends VBox
+public class GenericReadableTable extends TableView
 {   
-    private final TableView<ReadOnlyNvReadable> infoTable;
     private final TableColumn<ReadOnlyNvReadable, String> displayName;
     private final TableColumn<ReadOnlyNvReadable, String> displayValue;
     
-    public GenericReadableTablePane(List<ReadOnlyNvReadable> readables)
+    public GenericReadableTable(List<ReadOnlyNvReadable> readables)
     {
         super();
-        super.setAlignment(Pos.TOP_CENTER);
         
-        DoubleBinding bind = super.widthProperty().multiply(.85);
-        infoTable = new TableView<>(FXCollections.observableArrayList(readables));
-        infoTable.minWidthProperty().bind(bind);
-        infoTable.maxWidthProperty().bind(bind);
-        infoTable.setEditable(false);
-        infoTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        super.setItems(FXCollections.observableArrayList(readables));
+        super.setEditable(false);
+        super.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         displayName = new TableColumn<>("Name");
         displayName.setEditable(false);
@@ -59,8 +52,6 @@ public class GenericReadableTablePane extends VBox
         displayValue.setEditable(false);
         displayValue.setCellValueFactory(new PropertyValueFactory<>("displayValue"));
         
-        infoTable.getColumns().addAll(displayName, displayValue);
-        
-        super.getChildren().add(infoTable);
+        super.getColumns().addAll(displayName, displayValue);
     }
 }

@@ -27,7 +27,6 @@ import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.ReactionSliderBox;
-import javafx.beans.binding.DoubleBinding;
 
 public class FanTempReactionSectionPane extends SectionContentPane
 {
@@ -38,17 +37,11 @@ public class FanTempReactionSectionPane extends SectionContentPane
     {
         super(g.getTargetString() + " Temperature NvReactions");
         
-        DoubleBinding bind = super.widthProperty().multiply(.85);
-        
-        tempFanSpeedReaction = new ReactionSliderBox("Set the GPU's Fan Speed to the GPU's Temperature using an optional offset.\n\nThe Fan Mode must be set to Manual for this reaction.", NvSettings.getInstance(g).getCoreTemp(), NvSettings.getInstance(g).getNvFan().getFanTargetSpeed().getController().get());
-        tempFanSpeedReaction.minWidthProperty().bind(bind);
-        tempFanSpeedReaction.maxWidthProperty().bind(bind);
+        tempFanSpeedReaction = new ReactionSliderBox("Set the GPU's Fan Speed to the GPU's Temperature using an optional offset.", NvSettings.getInstance(g).getCoreTemp(), NvSettings.getInstance(g).getNvFan().getFanTargetSpeed().getController().get());
         
         tempLogoBrightnessReaction = new ReactionSliderBox("Set the GPU's Logo Brightness to the GPU's Temperature using an optional offset.", NvSettings.getInstance(g).getCoreTemp(), NvSettings.getInstance(g).getLogoBrightness().getController().get());
-        tempLogoBrightnessReaction.minWidthProperty().bind(bind);
-        tempLogoBrightnessReaction.maxWidthProperty().bind(bind);
         
-        super.getChildren().add(tempFanSpeedReaction);
-        super.getChildren().add(tempLogoBrightnessReaction);
+        super.add(tempFanSpeedReaction, 0, super.getRowCount());
+        super.add(tempLogoBrightnessReaction, 0, super.getRowCount());
     }
 }

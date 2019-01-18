@@ -38,7 +38,6 @@ public class ReactionSliderBox extends VBox
         super.setSpacing(15);
         super.setPadding(new Insets(10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE,10*GoliathENVIOUSFX.SCALE,5*GoliathENVIOUSFX.SCALE));
         
-        DoubleBinding buttonHeight = super.heightProperty().multiply(.17);
         DoubleBinding buttonWidth = super.widthProperty().multiply(.1);
         
         readable = rdbl;
@@ -54,16 +53,11 @@ public class ReactionSliderBox extends VBox
         enable.setOnMouseClicked(new EnableHandler());
         enable.minWidthProperty().bind(buttonWidth);
         enable.maxWidthProperty().bind(buttonWidth);
-        enable.minHeightProperty().bind(buttonHeight);
-        enable.maxHeightProperty().bind(buttonHeight);
         
         disable = new ToggleButton("Disable");
         disable.setOnMouseClicked(new DisableHandler());
-        disable.prefWidthProperty().bind(super.widthProperty().multiply(.1));
         disable.minWidthProperty().bind(buttonWidth);
         disable.maxWidthProperty().bind(buttonWidth);
-        disable.minHeightProperty().bind(buttonHeight);
-        disable.maxHeightProperty().bind(buttonHeight);
 
         ToggleGroup group = new ToggleGroup();
         group.getToggles().add(enable);

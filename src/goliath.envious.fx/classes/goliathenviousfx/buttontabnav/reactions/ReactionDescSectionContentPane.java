@@ -25,7 +25,6 @@ package goliathenviousfx.buttontabnav.reactions;
 
 import goliathenviousfx.GoliathENVIOUSFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.TextArea;
 
 public class ReactionDescSectionContentPane extends SectionContentPane
@@ -34,13 +33,9 @@ public class ReactionDescSectionContentPane extends SectionContentPane
     {
         super("Envious Reactions Description & Usage");
         
-        DoubleBinding widthBind = super.widthProperty().multiply(.85);
-        
         TextArea area = new TextArea();
         area.setFocusTraversable(false);
         area.setEditable(false);
-        area.minWidthProperty().bind(widthBind);
-        area.maxWidthProperty().bind(widthBind);
         area.setMinHeight(200*GoliathENVIOUSFX.SCALE);
         
         area.setText("Envious Reactions is an advanced feature that allows binding of GPU data to equal said data.\n\n"
@@ -51,6 +46,6 @@ public class ReactionDescSectionContentPane extends SectionContentPane
                 + "then the min/max will be used instead.");
         
         
-        super.getChildren().add(area);
+        super.add(area, 0, super.getRowCount());
     }
 }

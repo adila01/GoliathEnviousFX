@@ -81,7 +81,6 @@ public class OSDSectionContentPane extends SectionContentPane
         defaultReadables.add(NvSMI.getPerformanceLimit());
         defaultReadables.add(NvSettings.getPrimaryInstance().getNvFan().getFanCurrentSpeed());
         
-        DoubleBinding totalWidth = super.widthProperty().multiply(.85);
         DoubleBinding listWidth = super.widthProperty().multiply(.30).subtract(8*GoliathENVIOUSFX.SCALE);
         DoubleBinding buttonWidth = super.widthProperty().multiply(.25);
         
@@ -123,21 +122,14 @@ public class OSDSectionContentPane extends SectionContentPane
         HBox readableSelectionBox = new HBox();
         readableSelectionBox.setPadding(new Insets(8*GoliathENVIOUSFX.SCALE));
         readableSelectionBox.setStyle("-fx-background-color: -fx-theme-header;");
-        readableSelectionBox.minWidthProperty().bind(totalWidth);
-        readableSelectionBox.maxWidthProperty().bind(totalWidth);
         readableSelectionBox.setAlignment(Pos.CENTER);
         readableSelectionBox.getChildren().add(fullReadableList);
         readableSelectionBox.getChildren().add(buttonBox);
         readableSelectionBox.getChildren().add(activeReadableList);
         
-        DoubleBinding spaceHeightBind = super.heightProperty().multiply(.001);
-        DoubleBinding spaceWidthBind = super.widthProperty().multiply(.85);
-        
         Space firstSpace = new Space(false);
-        firstSpace.minHeightProperty().bind(spaceHeightBind);
-        firstSpace.maxHeightProperty().bind(spaceHeightBind);
-        firstSpace.minWidthProperty().bind(spaceWidthBind);
-        firstSpace.maxWidthProperty().bind(spaceWidthBind);
+        firstSpace.setMinHeight(1*GoliathENVIOUSFX.SCALE);
+        firstSpace.setMaxHeight(1*GoliathENVIOUSFX.SCALE);
         
         xLoc = new Spinner();
         xLoc.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1920));
@@ -145,8 +137,8 @@ public class OSDSectionContentPane extends SectionContentPane
         yLoc = new Spinner();
         yLoc.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1080));
         
-        super.getChildren().add(readableSelectionBox);
-        super.getChildren().add(firstSpace);
+        super.add(readableSelectionBox, 0, super.getRowCount());
+        super.add(firstSpace, 0, super.getRowCount());
     }
     
             

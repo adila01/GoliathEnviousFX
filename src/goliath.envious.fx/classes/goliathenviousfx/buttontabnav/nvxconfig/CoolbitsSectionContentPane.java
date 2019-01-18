@@ -36,12 +36,8 @@ public class CoolbitsSectionContentPane extends SectionContentPane
     {
         super("Coolbits Control");
         
-        DoubleBinding bind = super.widthProperty().multiply(.85);
-        
         coolbitsPane = new GenericComboEnumPane(NvXConfig.getCoolbitsController());
-        coolbitsPane.minWidthProperty().bind(bind);
-        coolbitsPane.maxWidthProperty().bind(bind);
         
-        super.getChildren().add(coolbitsPane);
+        super.add(coolbitsPane, 0, super.getRowCount());
     }
 }
