@@ -1,2 +1,4 @@
 /.nb-gradle/
+/.idea/
+/lib/
 /build/
