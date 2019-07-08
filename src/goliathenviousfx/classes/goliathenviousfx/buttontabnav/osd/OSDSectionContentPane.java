@@ -82,7 +82,8 @@ public class OSDSectionContentPane extends SectionContentPane
         
         List<ReadOnlyNvReadable> allReadables = new ArrayList<>();
         allReadables.addAll(NvGPU.getPrimaryNvGPU().getNvReadables());
-        allReadables.addAll(NvSMI.getPrimaryNvGPUInstance().getNvReadablesExceptOperationalStatus(OperationalStatus.NOT_SUPPORTED));
+        allReadables.add(NvSettings.getPrimaryNvGPUInstance().getUuid());
+        allReadables.addAll(NvSMI.getPrimaryNvGPUInstance().getNvReadablesExceptOperationalStatus(OperationalStatus.NOT_SUPPORTED));  
         
         if(!GoliathEnviousFX.smiOnly)
         {

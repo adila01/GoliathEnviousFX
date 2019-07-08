@@ -39,7 +39,7 @@ public class EnviousSectionContentPane extends SectionContentPane
         panes.get(0).setLeft(new Label("Nvidia Driver Version"));
         panes.get(0).setRight(new Label(NvSMI.getPrimaryNvGPUInstance().getDriverVersion().getValue().toString()));
         
-        panes.get(1).setLeft(new Label("Connected Nvidia GPU Count"));
+        panes.get(1).setLeft(new Label("Nvidia GPU Count"));
         panes.get(1).setRight(new Label(String.valueOf(NvGPU.getNvGPUList().size())));
         
         panes.get(2).setLeft(new Label("Force Unsupported Features"));

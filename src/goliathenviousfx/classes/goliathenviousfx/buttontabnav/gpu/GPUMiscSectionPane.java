@@ -48,6 +48,7 @@ public class GPUMiscSectionPane extends SectionContentPane
 
         List<ReadOnlyNvReadable> allReadables = new ArrayList<>();
         allReadables.addAll(NvGPU.getPrimaryNvGPU().getNvReadables());
+        allReadables.add(NvSettings.getPrimaryNvGPUInstance().getUuid());
         allReadables.addAll(NvSMI.getPrimaryNvGPUInstance().getNvReadables());
         
         if(!GoliathEnviousFX.smiOnly)

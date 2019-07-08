@@ -34,21 +34,21 @@ public class ReactionDescSectionContentPane extends SectionContentPane
     {
         super("Envious Reactions Description & Usage");
         
-        Label area = new Label();
-        area.prefWidthProperty().bind(super.widthProperty());
-        area.setAlignment(Pos.CENTER);
-        area.setStyle("-fx-background-color: -fx-theme-header;");
+        Label desc = new Label();
+        desc.setPrefWidth(Integer.MAX_VALUE);
+        desc.setAlignment(Pos.CENTER);
+        desc.setStyle("-fx-background-color: -fx-theme-header;");
         
-        area.setMinHeight(200*GoliathEnviousFX.SCALE);
+        desc.setPrefHeight(200*GoliathEnviousFX.SCALE);
         
-        area.setText("Envious Reactions is an advanced feature that allows binding of GPU data to equal said data.\n\n"
-                + "This allows for easy automated dynamic control over certain controllable GPU attributes but can be dangerous.\n\n"
-                + "You may also optionally set a non-zero offset that can be used to manipulate the dependant GPU data.\n\n"
-                + "Some NvReactions may require you to change the values for other NvAttributes before they may be used.\n\n"
-                + "If the dependant NvAttribute and the specified offset is less/greater than the NvAttribute's controller's min/max\n\n"
-                + "then the min/max will be used instead.");
+        desc.setText("NvReactions is an advanced feature that allows binding of GPU attributes to other controllable Nvidia attributes.\n\n"
+                + "This allows for easy automated control over certain controllable GPU attributes but can be dangerous.\n\n"
+                + "You may also optionally set a non-zero offset that can be used to manipulate the applied value.\n\n"
+                + "Some NvReactions may require you to change the values for other nvidia attributes before they may be used.\n\n"
+                + "If the dependant Nvidia attribute and the specified offset is greater or less then\n\n"
+                + "the automated Nvidia attribute controller's min/max then the min/max will be used instead.");
         
         
-        super.addTo(area);
+        super.addTo(desc);
     }
 }

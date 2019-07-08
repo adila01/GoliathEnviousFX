@@ -1,12 +1,13 @@
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +95,7 @@ public class AppLauncher
     private static final TimeUnit PROC_WAIT_UNIT = TimeUnit.SECONDS;
 
     // Repackage before running.
-    private static boolean REPACKAGE = true;
+    private static boolean REPACKAGE = false;
 
     private static String JVM_STRING_ARGS;
 
@@ -310,16 +311,16 @@ public class AppLauncher
         
         proc.waitFor(PROC_WAIT_TIME, PROC_WAIT_UNIT);
         
-        Scanner scan = new Scanner(proc.getErrorStream());
+        BufferedReader scan = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
         
-        if(scan.hasNextLine())
+        if(scan.ready())
         {
             System.out.println("Application launch failed. Application output: ");
             
-            String out = "";
+            String out = scan.readLine() + " ";
             
-            while(scan.hasNextLine())
-                out += scan.nextLine();
+            while(scan.ready())
+                out = out + " " + scan.readLine();
             
             LOGGER.log(Level.SEVERE, out);
             

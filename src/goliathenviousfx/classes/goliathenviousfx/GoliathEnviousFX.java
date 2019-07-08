@@ -1,6 +1,5 @@
 package goliathenviousfx;
 
-import goliath.envious.enums.OperationalStatus;
 import goliath.envious.enums.UpdateFrequency;
 import goliath.envious.gpu.NvGPU;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
