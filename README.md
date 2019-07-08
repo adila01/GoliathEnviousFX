@@ -1,6 +1,14 @@
 # Goliath Envious FX
 GUI Linux Nvidia GPU overclocking utility written in JavaFX
 
+![](https://user-images.githubusercontent.com/10172435/60796294-b6dec400-a132-11e9-9f92-68a364384bf9.png)
+![](https://user-images.githubusercontent.com/10172435/60796295-b6dec400-a132-11e9-983a-543e19c11f0c.png)
+![](https://user-images.githubusercontent.com/10172435/60796296-b6dec400-a132-11e9-9993-2d54858a620f.png)
+![](https://user-images.githubusercontent.com/10172435/60796297-b6dec400-a132-11e9-965b-10ff6bf084f9.png)
+![](https://user-images.githubusercontent.com/10172435/60796300-b7775a80-a132-11e9-85c8-74488ee499cb.png)
+![](https://user-images.githubusercontent.com/10172435/60796617-58feac00-a133-11e9-92d7-0f491d0dcc3a.png)
+![](https://user-images.githubusercontent.com/10172435/60796299-b7775a80-a132-11e9-87a0-a759d88d63ed.png)
+
 ## Download
 You can download from the [releases](https://github.com/BlueGoliath/GoliathEnviousFX/releases) page.
 
@@ -13,14 +21,18 @@ You can download from the [releases](https://github.com/BlueGoliath/GoliathEnvio
 
 ## Support
 Only desktop GeForce GTX and RTX GPUs are offially supported by this application but other Nvidia GPUs should still work.
+
 Only the latest LTS/normal/Vulkan beta release drivers are supported.
+
+SLI is not technically supported as I have no way to test it. 
+
 If you have a GPU that is supported but doesn't work please make a bug report.
 
 ## Usage
 Launch with 'java AppLauncher.java'. Launch with 'sudo' for power limit and coolbits control.
 
 Use '--force' switch to force Goliath Envious
-to allow usage regardless of whether the GPU actually supports a given feature. This DOES NOT magically make said feature available but overrides the API hint.
+to allow usage regardless of whether the GPU actually supports a given feature. This DOES NOT magically make features available but overrides the API hint that they are not supported.
 This does not allow coolbits control.
 
 Use '--smionly' switch to not start the nvidia-settings update thread(lower CPU usage).
@@ -41,6 +53,8 @@ The following Nvidia attributes WILL NOT be updated:
 *Will be updated after applying a new control value.
 
 UI components that would normally update or react to changes to these Nvidia attributes will not update.
+
+Use 'view' menu to enable resizing. Resizing is disabled by default to reduce UI bugginess(see known issues).
 
 ## Features(currently)
 * Easily get supported Nvidia Settings CLI Attribute readouts
@@ -69,7 +83,7 @@ In-game performance as a result varies wildy and SHOULD NOT be used in any actua
 * JavaFX GTK3 Bug: mouse transparency doesn't work correctly and text may be clickable in OSD. mouse transparency doesn't work at all in GTK3. Goliath Envious FX forces GTK 2 to attempt to fix this.
 * JavaFX GTK3 Bug: window appears in the top-left or some other incorrect location then moves to center of screen. Fixed by setting GTK to 2.
 * JavaFX GTK Bug: When maximized, the Maximized button will not reappear and disappear correctly when switching between resiable enabled/disabled.
-* JavaFX TilePane/ScrollPane Bug: ScrollPane does not handle TilePane's height correctly and will ignore it. To fix this, ScrollPane's scrollbars are always visible.
+* JavaFX TilePane/ScrollPane Bug: ScrollPane does not handle TilePane's height correctly and will ignore it, resulting in numerous bugs. To fix this, ScrollPane's scrollbars are always visible.
 * JavaFX Rendering Bug: Resizing a JavaFX application results in buffer resetting and other visual glitching. Using partial fix by setting -Dprism.forceUploadingPainter to true.
 * JavaFX Rendering Bug/Performance: UI fails to keep up with resizing, resulting in white space in recently expanded areas. Making the window smaller results in UI components failing to keep up as well.
 * JavaFX Rendering Bug: resizing Goliath Envious FX(and probably other applications, no one uses TableView apparently) or the SplitPane divider can result in horizontal scroll bars showing in TableView despite enough room being available to show content. Resizing the window again will force them to go away. Resizing from the bottom right results in it happening less often(affected by performance).
@@ -80,7 +94,7 @@ In-game performance as a result varies wildy and SHOULD NOT be used in any actua
 * JavaFX SplitPane/rendering Bug: jittering when responding to position property change to force max divider position of 15%. JavaFX doesn't seem to be able to keep up with window resizing.
 * JavaFX CSS Bug: in-between transion white space with content tree view when not maximized. Updating the component by clicking a tree item makes it go away.
 * JavaFX CSS Bug: black number color when switching to content containing a Spinner component. Switching to other content and back will fix this. Most likely https://bugs.openjdk.java.net/browse/JDK-8088506.
-* JavaaFX CSS Bug: clicking and holding various UI components(slider thumbs, scrollbar, etc) and alt-tabbing results in those UI components keeping the selected CSS styling even when/after clicking other components. Clicking the glitched component fixes it.
+* JavaFX CSS Bug: clicking and holding various UI components(slider thumbs, scrollbar, etc) and alt-tabbing results in those UI components keeping the selected CSS styling even when/after clicking other components. Clicking the glitched component fixes it.
 * JavaFX/Goliath Envious FX: various other minor CSS bugs with TableView column separator and button keyboard focus(hard to even notice the buttons unless you put your eyes directly to the screen). JavaFX's CSS documentation isn't well documented and I can't find any ways to fix these after hours of searching. They are *really* minor though.
 
 ## Disclaimer
