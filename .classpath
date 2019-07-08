@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="lib" path="build/libs/GoliathENVIOUSFX.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.css.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.envious.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.envious.reactive.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.io.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.nvserver.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.nvsettings.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.nvsmi.jar"/>
+	<classpathentry kind="lib" path="lib/goliath.nvxconfig.jar"/>
+	<classpathentry kind="output" path="build/classes/java/main"/>
+</classpath>

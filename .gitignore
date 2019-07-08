@@ -2,3 +2,5 @@
 /.idea/
 /lib/
 /build/
+/nbproject/private/
+/dist/
