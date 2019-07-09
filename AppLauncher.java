@@ -60,10 +60,10 @@ public class AppLauncher
     private static final List<File> EXT_MODULE_DIRS = new ArrayList<>();
 
     // Libs directory.
-    private static final File LIBS = new File("application/");
+    private static final File LIBS = new File("application");
 
     // JVM directory for packaged JVMs
-    private static final File JVMS = new File("jvm/");
+    private static final File JVMS = new File("jvm");
 
     // Launch jar containing the specified main class
     private static final File LAUNCH_JAR = new File("/run/media/ty/Windows_Linux_Shared/NetBeansProjects/GoliathENVIOUSFX/dist/goliathenviousfx.jar");
@@ -95,15 +95,15 @@ public class AppLauncher
     private static final TimeUnit PROC_WAIT_UNIT = TimeUnit.SECONDS;
 
     // Repackage before running.
-    private static boolean REPACKAGE = false;
+    private static boolean REPACKAGE = true;
 
     private static String JVM_STRING_ARGS;
 
     public static void main(String[] args) throws IOException, InterruptedException
     {
         LOGGER.log(Level.INFO, "Launcher start");
-
-        if(!LAUNCH_JAR.exists())
+        
+        if(!Path.of(LIBS.getAbsolutePath(), LAUNCH_JAR.getName()).toFile().exists() && !LAUNCH_JAR.exists())
         {
             LOGGER.log(Level.SEVERE, "Jar to launch doesn't exist. Exiting.");
             System.exit(1);
@@ -320,7 +320,7 @@ public class AppLauncher
             String out = scan.readLine() + " ";
             
             while(scan.ready())
-                out = out + " " + scan.readLine();
+                out = out + "\n" + scan.readLine();
             
             LOGGER.log(Level.SEVERE, out);
             

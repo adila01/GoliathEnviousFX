@@ -73,6 +73,7 @@ public class GoliathEnviousFX extends Application
         
         for(int i = 0; i < NvGPU.getNvGPUList().size(); i++)
         {
+            settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getPowerMizerMode());
             settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getPerfModes());
             settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getCurrentPerformanceLevel());
             settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getPCIeUtilization());

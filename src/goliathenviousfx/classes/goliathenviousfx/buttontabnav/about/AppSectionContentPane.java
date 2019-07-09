@@ -37,7 +37,7 @@ public class AppSectionContentPane extends SectionContentPane
     {
         super("About Goliath Envious FX");
 
-        label = new Label("Goliath Envious FX is a Java & JavaFX frontend for GoliathEnvious Linux Nvidia GPU overclocking library.");
+        label = new Label("Goliath Envious FX is a JavaFX frontend for Goliath Envious Linux Nvidia GPU overclocking library.");
         label.setPrefWidth(Integer.MAX_VALUE);
         label.setAlignment(Pos.CENTER);
         label.setStyle("-fx-background-color: -fx-theme-header;");
