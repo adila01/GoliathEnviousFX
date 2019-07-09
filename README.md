@@ -33,12 +33,13 @@ Launch with 'java AppLauncher.java'. Launch with 'sudo' for power limit and cool
 
 Use '--force' switch to force Goliath Envious
 to allow usage regardless of whether the GPU actually supports a given feature. This DOES NOT magically make features available but overrides the API hint that they are not supported.
-This does not allow coolbits control.
+This does not allow coolbits control. For debug mostly.
 
 Use '--smionly' switch to not start the nvidia-settings update thread(lower CPU usage).
 The following Nvidia attributes WILL NOT be updated:
 
 * Performance Levels
+* Current PowerMizer Mode
 * Current Performance Level
 * PCIe Bandwidth Utilization
 * Video Engine Utilization
