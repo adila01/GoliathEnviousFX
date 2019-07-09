@@ -53,7 +53,7 @@ public class OverviewSectionPane extends SectionContentPane
         gpuNameTile.setNvReadable(g.getNameNvReadable());
         
         Tile gpuTemp = new Tile();
-        gpuTemp.setNvReadable(NvSettings.getNvGPUInstance(g).getCoreTemp());
+        gpuTemp.setNvReadable(NvSMI.getNvGPUInstance(g).getCoreTemp());
         
         Tile gpuIdTile = new Tile();
         gpuIdTile.setNvReadable(NvSMI.getNvGPUInstance(g).getBIOSVersion());
@@ -86,10 +86,10 @@ public class OverviewSectionPane extends SectionContentPane
         memoryBandwidthUsage.setNvReadable(NvSMI.getNvGPUInstance(g).getMemoryUtilization()); 
         
         Tile pcieGen = new Tile();
-        pcieGen.setNvReadable(NvSettings.getNvGPUInstance(g).getPCIeGen());
+        pcieGen.setNvReadable(NvSMI.getNvGPUInstance(g).getPCIeGen());
 
         Tile pcieCurrentWidth = new Tile();
-        pcieCurrentWidth.setNvReadable(NvSettings.getNvGPUInstance(g).getPCIeCurrentWidth());
+        pcieCurrentWidth.setNvReadable(NvSMI.getNvGPUInstance(g).getPCIeCurrentWidth());
         
         Tile pcieCurrentSpeed = new Tile();
         pcieCurrentSpeed.setNvReadable(NvSettings.getNvGPUInstance(g).getPCIeCurrentSpeed());

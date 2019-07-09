@@ -80,6 +80,8 @@ public class GoliathEnviousFX extends Application
             settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getVideoEngineUtilization());
             settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getVideoEncoderUtilization());
             settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getVideoDecoderUtilization());
+            settingsreadables.add(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getPCIeCurrentSpeed());
+            
             
             if(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getCoreOffset().getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
             {

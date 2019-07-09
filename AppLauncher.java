@@ -95,7 +95,7 @@ public class AppLauncher
     private static final TimeUnit PROC_WAIT_UNIT = TimeUnit.SECONDS;
 
     // Repackage before running.
-    private static boolean REPACKAGE = true;
+    private static boolean REPACKAGE = false;
 
     private static String JVM_STRING_ARGS;
 

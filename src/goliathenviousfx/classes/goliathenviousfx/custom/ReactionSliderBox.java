@@ -107,7 +107,7 @@ public class ReactionSliderBox extends BorderPane
     {
         @Override
         public void handle(MouseEvent event)
-        {
+        {   
             readable.valueProperty().addListener(binding);
             AppStatusBar.setActionText("NvReaction for " + readable.getNvTarget() + " " + readable.displayNameProperty().get() + " has been enabled.");
         }

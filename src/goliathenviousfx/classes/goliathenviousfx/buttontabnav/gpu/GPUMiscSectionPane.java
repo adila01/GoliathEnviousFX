@@ -59,6 +59,7 @@ public class GPUMiscSectionPane extends SectionContentPane
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVideoEncoderUtilization());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVideoDecoderUtilization());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getPCIeUtilization());
+            allReadables.add(NvSettings.getPrimaryNvGPUInstance().getPCIeCurrentSpeed());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCoreOffset());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getMemoryOffset());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVoltageOffset());
@@ -66,7 +67,6 @@ public class GPUMiscSectionPane extends SectionContentPane
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getPowerMizerMode());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getNvGPULogoBrightness());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getFanMode());  
-            allReadables.addAll(NvSettings.getPrimaryNvGPUInstance().getNvFan().getNvReadables());
         }
         
         tablePane = new GenericReadableTable(allReadables);
