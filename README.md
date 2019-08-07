@@ -33,12 +33,13 @@ Launch with 'java AppLauncher.java'. Launch with 'sudo' for power limit and cool
 
 Use '--force' switch to force Goliath Envious
 to allow usage regardless of whether the GPU actually supports a given feature. This DOES NOT magically make features available but overrides the API hint that they are not supported.
-This does not allow coolbits control.
+This does not allow coolbits control. For debug mostly.
 
 Use '--smionly' switch to not start the nvidia-settings update thread(lower CPU usage).
 The following Nvidia attributes WILL NOT be updated:
 
 * Performance Levels
+* Current PowerMizer Mode
 * Current Performance Level
 * PCIe Bandwidth Utilization
 * Video Engine Utilization
@@ -77,6 +78,7 @@ In-game performance as a result varies wildy and SHOULD NOT be used in any actua
 * nvidia-settings: Attribute updating is CPU intensive. You can use '--smionly' to reduce usage greatly.
 * Goliath Envious FX: Use of the OSD can and will cause performance issues with games.
 * nvidia-settings: setting a fan speed of 0 on a GPU that doesn't support turning off the fans(newer GPUs with secondary BIOS set) results in strange results. Data reported by Goliath Envious is accurate.
+* Linux: Overclocking does not work under Fedora. This is a Fedora problem. 
 * Linux: Many Linux distros(Fedora, Arch Linux) do not package or install the Nvidia binary GPU driver correctly. If the drivers was installed using a GUI program you are *probably* fine. Please contact your Linux distro developers and ask them to package/install them correctly.
 * Linux: Updating before and/or while running Goliath Envious FX can result in the application failing to work or launch. It shouldn't even be said that live system updating is *very* dangerous and should *never* be done under any normal circumstances. I've had a bogus bug report with GoliathOUFX as a result of this, stop doing it please.
 * JavaFX Performance: JavaFX performance is very poor due to -Dprism.forceUploadingPainter being set to true. GPU Utilization is 2x to 2.5x higher when performing actions, higher GPU power draw, and PCIe utilization is extremely high as well.
