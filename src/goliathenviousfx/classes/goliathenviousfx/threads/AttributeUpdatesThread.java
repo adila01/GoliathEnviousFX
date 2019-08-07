@@ -23,8 +23,10 @@
  */
 package goliathenviousfx.threads;
 
+import goliath.envious.exceptions.UpdateFailedException;
 import java.util.List;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
+import goliath.envious.utility.EnviousPlatform;
 
 public class AttributeUpdatesThread extends Thread
 {   
@@ -45,11 +47,18 @@ public class AttributeUpdatesThread extends Thread
     @Override
     public void run()
      {
-        while(true)
+        while(EnviousPlatform.CURRENT.dirtyPlatformProperty().get() == false)
         {   
             for(int i = 0; i < readables.size(); i++)
             {
-                readables.get(i).update();
+                try
+                {
+                    readables.get(i).update();
+                }
+                catch (UpdateFailedException ex)
+                {
+                    ex.printStackTrace();
+                }
                 
                 try
                 {

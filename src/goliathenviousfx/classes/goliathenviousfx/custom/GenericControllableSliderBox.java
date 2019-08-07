@@ -15,6 +15,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 
 public class GenericControllableSliderBox extends VBox
@@ -35,12 +36,19 @@ public class GenericControllableSliderBox extends VBox
         readable.valueProperty().addListener(new ValueListener());
         
         slider = new LabeledSlider(readable, false);
+        slider.getSlider().valueProperty().addListener(new SliderListener());
+        
+        Label text = new Label(rdbl.displayNameProperty().get() + "(" + rdbl.getUnit() + ")");
+        text.setAlignment(Pos.CENTER_LEFT);
+        text.setTooltip(new Tooltip(rdbl.getCmdName()));
         
         apply = new Button("Apply");
+        apply.setTooltip(new Tooltip("Set value to " + slider.getTextBox().getText() + " " + readable.getUnit()));
         apply.setPrefWidth(Integer.MAX_VALUE);
         apply.setOnMouseClicked(new ApplyHandler());
         
         reset = new Button("Reset");
+        reset.setTooltip(new Tooltip("Reset value to " + readable.getController().get().getResetValue() + " " + readable.getUnit()));
         reset.setPrefWidth(Integer.MAX_VALUE);
         reset.setOnMouseClicked(new ResetHandler());
 
@@ -59,10 +67,7 @@ public class GenericControllableSliderBox extends VBox
         buttonBox.getChildren().add(apply);
         buttonBox.getChildren().add(reset);
         
-        Label title = new Label(rdbl.displayNameProperty().get() + "(" + rdbl.getUnit() + ")");
-        title.setAlignment(Pos.CENTER_LEFT);
-        
-        super.getChildren().add(title);
+        super.getChildren().add(text);
         super.getChildren().add(slider);
         super.getChildren().add(buttonBox);
     }
@@ -71,6 +76,16 @@ public class GenericControllableSliderBox extends VBox
     {
         return (int)slider.getSlider().getValue();
     }
+    
+    private class SliderListener implements ChangeListener<Number>
+    {
+        @Override
+        public void changed(ObservableValue<? extends Number> ov, Number t, Number t1)
+        {
+            apply.setTooltip(new Tooltip("Set value to " + slider.getTextBox().getText() + " " + readable.getUnit()));
+        }
+    }
+            
     
     private class ValueListener implements ChangeListener<Integer>
     {

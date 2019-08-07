@@ -40,7 +40,6 @@ public class SectionContentPane extends VBox
     public SectionContentPane(String tlt)
     {
         super();
-        //super.setStyle("-fx-border-color: -fx-theme-background-alt;");
         super.setPrefWidth(Integer.MAX_VALUE);
         super.setAlignment(Pos.TOP_CENTER);
         
@@ -68,10 +67,9 @@ public class SectionContentPane extends VBox
         super.getChildren().add(subGrid);
     }
     
-    public SectionContentPane(String tlt, String desc)
+    public SectionContentPane(String tlt, Node node)
     {
         super();
-        //super.setStyle("-fx-border-color: -fx-theme-background-alt;");
         super.setPrefWidth(Integer.MAX_VALUE);
         super.setAlignment(Pos.TOP_CENTER);
         
@@ -84,6 +82,8 @@ public class SectionContentPane extends VBox
         
         subGrid.getColumnConstraints().add(conWidthContent);
         
+        subGrid.add(node, 0, 0);
+        
         Space bottomSpace = new Space(true);
         bottomSpace.setMinHeight(1*GoliathEnviousFX.SCALE);
         bottomSpace.setMaxHeight(1*GoliathEnviousFX.SCALE);
@@ -94,14 +94,7 @@ public class SectionContentPane extends VBox
         sectionLabel.setPrefWidth(Integer.MAX_VALUE);
         sectionLabel.setPadding(new Insets(8*GoliathEnviousFX.SCALE));
         
-        Label sectionDesc = new Label(desc);
-        sectionDesc.setStyle("-fx-background-color: -fx-theme-header;");
-        sectionDesc.setAlignment(Pos.CENTER);
-        sectionDesc.setPrefWidth(Integer.MAX_VALUE);
-        sectionDesc.setPadding(new Insets(8*GoliathEnviousFX.SCALE));
-        
         super.getChildren().add(sectionLabel);
-        super.getChildren().add(sectionDesc);
         super.getChildren().add(bottomSpace);
         super.getChildren().add(subGrid);
     }

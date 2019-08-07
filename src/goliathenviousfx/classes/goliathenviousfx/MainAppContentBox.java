@@ -25,13 +25,18 @@ package goliathenviousfx;
 
 import goliath.envious.gpu.NvGPU;
 import goliath.nvsettings.main.NvSettings;
+import goliathenviousfx.buttontabnav.ContentPane;
 import goliathenviousfx.buttontabnav.about.AboutContentPane;
 import goliathenviousfx.buttontabnav.fan.FanContentPane;
 import goliathenviousfx.buttontabnav.gpu.GPUContentPane;
+import goliathenviousfx.buttontabnav.monitoring.MonitoringContentPane;
 import goliathenviousfx.buttontabnav.nvxconfig.NvXConfigPane;
+import goliathenviousfx.buttontabnav.options.OptionsContentPane;
 import goliathenviousfx.buttontabnav.osd.OSDContentPane;
 import goliathenviousfx.buttontabnav.overview.OverviewContentPane;
 import goliathenviousfx.buttontabnav.reactions.ReactionContentPane;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ScrollPane;
@@ -45,12 +50,18 @@ public class MainAppContentBox extends SplitPane
 {
     private final ScrollPane contentScroller;
     private final TreeView<String> view;
+    private final Map<TreeItem<String>, Double> positionMap;
+    
+    private TreeItem<String> currentItem; 
     
     public MainAppContentBox()
     {
         super();
         
+        positionMap = new HashMap<>();
+        
         contentScroller = new ScrollPane();
+        contentScroller.vvalueProperty().addListener(new ViewPositionListener());
         contentScroller.setFitToHeight(true);
         contentScroller.setFitToWidth(true);
         contentScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -66,26 +77,36 @@ public class MainAppContentBox extends SplitPane
                 view.setPrefHeight(Screen.getScreens().get(i).getBounds().getHeight());
         }
         
-        ContentItem overview = new ContentItem(new OverviewContentPane(), "Overview");
+        ContentItem overview = new ContentItem(new ContentPane(), "Overview");
         overview.setExpanded(true);
         view.getRoot().getChildren().add(overview);
         
         for(int i = 0; i < NvGPU.getNvGPUList().size(); i++)
             overview.getChildren().add(new ContentItem(new OverviewContentPane(NvGPU.getNvGPUList().get(i)), NvGPU.getNvGPUList().get(i).getNvTarget() + " - " + NvGPU.getNvGPUList().get(i).nameProperty().get()));
         
-        ContentItem gpus = new ContentItem(new GPUContentPane(), "NvGPU");
+        ContentItem gpus = new ContentItem(new ContentPane(), "NvGPU");
         gpus.setExpanded(true);
         view.getRoot().getChildren().add(gpus);
         
         for(int i = 0; i < NvGPU.getNvGPUList().size(); i++)
             gpus.getChildren().add(new ContentItem(new GPUContentPane(NvGPU.getNvGPUList().get(i)), NvGPU.getNvGPUList().get(i).getNvTarget() + " - " + NvGPU.getNvGPUList().get(i).nameProperty().get()));
         
-        ContentItem fans = new ContentItem(new FanContentPane(), "NvFan");
+        ContentItem fans = new ContentItem(new ContentPane(), "NvFan");
         fans.setExpanded(true);
         view.getRoot().getChildren().add(fans);
         
         for(int i = 0; i < NvGPU.getNvGPUList().size(); i++)
             fans.getChildren().add(new ContentItem(new FanContentPane(NvGPU.getNvGPUList().get(i)), NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getNvFan().getNvTarget() + " - " + NvGPU.getNvGPUList().get(i).nameProperty().get()));
+        
+        ContentItem monitoring = new ContentItem(new ContentPane(), "NvMonitor");
+        monitoring.setExpanded(true);
+        view.getRoot().getChildren().add(monitoring);
+        
+        for(int i = 0; i < NvGPU.getNvGPUList().size(); i++)
+        {
+            monitoring.getChildren().add(new ContentItem(new MonitoringContentPane(NvGPU.getNvGPUList().get(i)), NvGPU.getNvGPUList().get(i).getNvTarget() + " - " + NvGPU.getNvGPUList().get(i).nameProperty().get()));
+            monitoring.getChildren().add(new ContentItem(new MonitoringContentPane(NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getNvFan()), NvSettings.getNvGPUInstance(NvGPU.getNvGPUList().get(i)).getNvFan().getNvTarget() + " - " + NvGPU.getNvGPUList().get(i).nameProperty().get()));
+        }
         
         ContentItem xconfig = new ContentItem(new NvXConfigPane(), "NvXConfig");
         view.getRoot().getChildren().add(xconfig);
@@ -93,40 +114,52 @@ public class MainAppContentBox extends SplitPane
         ContentItem reactions = new ContentItem(new ReactionContentPane(), "NvReactions");
         view.getRoot().getChildren().add(reactions);
         
-        ContentItem osd = new ContentItem(new OSDContentPane(), "OSD");
+        ContentItem osd = new ContentItem(new OSDContentPane(), "NvOSD");
         view.getRoot().getChildren().add(osd);
+        
+        ContentItem options = new ContentItem(new OptionsContentPane(), "Options");
+        view.getRoot().getChildren().add(options);
         
         ContentItem about = new ContentItem(new AboutContentPane(), "About");
         view.getRoot().getChildren().add(about);
-        
-        if(NvGPU.getNvGPUList().size() != 1)
-        {
-            overview.setExpanded(true);
-            gpus.setExpanded(true);
-            fans.setExpanded(true);
-        }
-        else
-        {
-            overview.setExpanded(false);
-            gpus.setExpanded(false);
-            fans.setExpanded(false);
-        }
+
+        GoliathEnviousFX.STAGE.showingProperty().addListener(new ShowingListener());
         
         contentScroller.setContent(overview.getContent());
+        currentItem = overview;
+        
+        positionMap.put(overview, 0.0);
 
         super.getItems().add(view);
         super.getItems().add(contentScroller);
         
-        view.getSelectionModel().selectFirst();
+        view.getSelectionModel().select(((ContentItem)overview.getChildren().get(0)));
         view.getSelectionModel().selectedItemProperty().addListener(new ContentSwitchHandler());
         
         super.getDividers().get(0).positionProperty().set(.15);
         super.getDividers().get(0).positionProperty().addListener(new DividerListener());
     }           
     
+    private class ViewPositionListener implements ChangeListener<Number>
+    {
+        @Override
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+        {
+            positionMap.put(currentItem, newValue.doubleValue());
+        }
+    }
+    
+    private class ShowingListener implements ChangeListener<Boolean>
+    {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1)
+        {
+            contentScroller.setContent(((ContentItem)view.getRoot().getChildren().get(0).getChildren().get(0)).getContent());
+        }
+    }
+    
     private class DividerListener implements ChangeListener<Number>
     {
-
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
         {
@@ -141,7 +174,19 @@ public class MainAppContentBox extends SplitPane
         @Override
         public void changed(ObservableValue<? extends TreeItem<String>> observable, TreeItem<String> oldValue, TreeItem<String> newValue)
         {
+            if(newValue.getValue().equals("Overview") || newValue.getValue().equals("NvGPU") || newValue.getValue().equals("NvFan") || newValue.getValue().equals("NvMonitor"))
+                return;
+            
+            if(!positionMap.containsKey(newValue))
+                positionMap.put(newValue, 0.0);
+            
             contentScroller.setContent(((ContentItem)newValue).getContent());
+            contentScroller.setContent(((ContentItem)oldValue).getContent());
+            contentScroller.setContent(((ContentItem)newValue).getContent());
+            
+            currentItem = newValue;
+            contentScroller.setVvalue(positionMap.get(newValue));
+            
         }
     }
     
@@ -168,6 +213,4 @@ public class MainAppContentBox extends SplitPane
             return content;
         }
     }
-    
-
 }

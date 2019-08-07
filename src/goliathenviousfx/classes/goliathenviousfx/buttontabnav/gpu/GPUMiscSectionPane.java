@@ -27,6 +27,7 @@ import goliath.envious.gpu.NvGPU;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsmi.main.NvSMI;
+import goliathenviousfx.settings.AppSettings;
 import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
@@ -51,7 +52,7 @@ public class GPUMiscSectionPane extends SectionContentPane
         allReadables.add(NvSettings.getPrimaryNvGPUInstance().getUuid());
         allReadables.addAll(NvSMI.getPrimaryNvGPUInstance().getNvReadables());
         
-        if(!GoliathEnviousFX.smiOnly)
+        if(!AppSettings.getNvSMIOnly().getValue())
         {
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCUDACores());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCurrentPerformanceLevel());
@@ -63,7 +64,7 @@ public class GPUMiscSectionPane extends SectionContentPane
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCoreOffset());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getMemoryOffset());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVoltageOffset());
-            allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCurrentVoltage());
+            allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVoltageCurrent());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getPowerMizerMode());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getNvGPULogoBrightness());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getFanMode());  
@@ -75,7 +76,7 @@ public class GPUMiscSectionPane extends SectionContentPane
         
         logoBrightnesControl = new GenericControllableSliderBox(NvSettings.getNvGPUInstance(g).getNvGPULogoBrightness());
         
-        fanModeControl = new GenericComboEnumPane(NvSettings.getNvGPUInstance(g).getFanMode());
+        fanModeControl = new GenericComboEnumPane<>(NvSettings.getNvGPUInstance(g).getFanMode());
         
         Space space = new Space(true);
         space.setMinHeight(1*GoliathEnviousFX.SCALE);

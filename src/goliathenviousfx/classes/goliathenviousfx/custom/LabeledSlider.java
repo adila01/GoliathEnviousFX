@@ -1,12 +1,14 @@
 package goliathenviousfx.custom;
 
+import goliath.envious.enums.Unit;
 import goliath.envious.exceptions.ValueSetFailedException;
-import goliath.envious.interfaces.NvControllable;
+import goliath.envious.interfaces.ReadOnlyNvControllable;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
+import goliathenviousfx.settings.AppSettings;
 import goliathenviousfx.GoliathEnviousFX;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,6 +46,9 @@ public class LabeledSlider extends HBox
             slider.setValue(attr.getValue());
         }
         
+        if(!AppSettings.getAllowUnderclocking().getValue() && !attr.unitProperty().get().equals(Unit.WATTS))
+            slider.setMin(0);
+        
         slider.valueProperty().addListener(new DefaultContSliderHandler());
         
         textBox = new TextField();
@@ -68,7 +73,7 @@ public class LabeledSlider extends HBox
         return textBox;
     }
     
-    public NvControllable<Integer> getController()
+    public ReadOnlyNvControllable<Integer> getController()
     {
         return attr.getController().get();
     }
@@ -113,13 +118,13 @@ public class LabeledSlider extends HBox
                 }
             }
             
-            if(Integer.parseInt(textBox.getText()) > attr.getController().get().getAllValues().getMax())
-                textBox.setText(attr.getController().get().getAllValues().getMax().toString());
+            if(Integer.parseInt(textBox.getText()) > attr.getController().get().getValueRange().getMax())
+                textBox.setText(attr.getController().get().getValueRange().getMax().toString());
             
-            if(Integer.parseInt(textBox.getText()) < attr.getController().get().getAllValues().getMin())
-                textBox.setText(attr.getController().get().getAllValues().getMin().toString());
+            if(Integer.parseInt(textBox.getText()) < attr.getController().get().getValueRange().getMin())
+                textBox.setText(attr.getController().get().getValueRange().getMin().toString());
             
-            if(!attr.getController().get().getAllValues().isWithinRange(Integer.parseInt(textBox.getText())))
+            if(!attr.getController().get().getValueRange().isWithinRange(Integer.parseInt(textBox.getText())))
                 textBox.setText(attr.getValue().toString());
             
             slider.setValue(Integer.parseInt(textBox.getText()));
@@ -146,7 +151,7 @@ public class LabeledSlider extends HBox
             if(this.isPartOf(Integer.parseInt(textBox.getText())))
                 return;
             
-            if(!attr.getController().get().getAllValues().isWithinRange(Integer.parseInt(textBox.getText())))
+            if(!attr.getController().get().getValueRange().isWithinRange(Integer.parseInt(textBox.getText())))
             {
                 textBox.setText(String.valueOf((int)slider.getValue()));
                 return;
@@ -172,9 +177,9 @@ public class LabeledSlider extends HBox
         {
             boolean is = false;
             
-            for(int i = 0; i < attr.getController().get().getAllValues().getAllInRange().size(); i++)
+            for(int i = 0; i < attr.getController().get().getValueRange().getAllInRange().size(); i++)
             {
-                String str = String.valueOf(attr.getController().get().getAllValues().getAllInRange().get(i));
+                String str = String.valueOf(attr.getController().get().getValueRange().getAllInRange().get(i));
                 str = str.substring(0, str.length()-1);
                 int partVal = Integer.parseInt(str);
                 if(partVal == num)

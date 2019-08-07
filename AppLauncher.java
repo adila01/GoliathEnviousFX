@@ -33,7 +33,7 @@ public class AppLauncher
     public static void init()
     {
         // JVM args
-        JVM_LIST_ARGS.add("-client");
+        JVM_LIST_ARGS.add("-XX:+NeverActAsServerClassMachine");
         JVM_LIST_ARGS.add("-Djdk.gtk.version=2");
         JVM_LIST_ARGS.add("-Dprism.forceUploadingPainter=true");
 
@@ -89,13 +89,13 @@ public class AppLauncher
     private static final JVM JAVA_TO_USE = JVM.SYSTEM;
     
     // Wait time to use before checking for and printing application errors printed to error stream
-    private static final long PROC_WAIT_TIME = 2;
+    private static final long PROC_WAIT_TIME = 10;
     
     // Time unit to use for checking for and printing application errors printed to error stream 
     private static final TimeUnit PROC_WAIT_UNIT = TimeUnit.SECONDS;
 
     // Repackage before running.
-    private static boolean REPACKAGE = false;
+    private static boolean REPACKAGE = true;
 
     private static String JVM_STRING_ARGS;
 

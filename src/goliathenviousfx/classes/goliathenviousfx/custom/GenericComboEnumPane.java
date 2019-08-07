@@ -39,6 +39,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -50,7 +51,7 @@ public class GenericComboEnumPane<E> extends BorderPane
     private NvControllable<E> controller;
     private final ComboBox<E> combo;
     private final Button apply;
-    private Button reset;
+    private final Button reset;
     private final Label text;
     
     public GenericComboEnumPane(ReadOnlyNvReadable<E> rdbl)
@@ -64,15 +65,19 @@ public class GenericComboEnumPane<E> extends BorderPane
         
         text = new Label(rdbl.displayNameProperty().get());
         text.setAlignment(Pos.CENTER_LEFT);
+        text.setTooltip(new Tooltip(rdbl.getCmdName()));
         
-        combo = new ComboBox<>(FXCollections.observableArrayList(rdbl.getController().get().getAllValues().getAllInRange()));
+        combo = new ComboBox<>(FXCollections.observableArrayList(rdbl.getController().get().getValueRange().getAllInRange()));
         combo.getSelectionModel().select(rdbl.getValue());
+        combo.valueProperty().addListener(new ComboListener());
         
         apply = new Button("Apply");
+        apply.setTooltip(new Tooltip("Set value to " + readable.getValue().toString()));
         apply.setPrefWidth(Integer.MAX_VALUE);
         apply.setOnMouseClicked(new ApplyHandler());
         
         reset = new Button("Reset");
+        reset.setTooltip(new Tooltip("Reset value to " + readable.getController().get().getResetValue().toString()));
         reset.setPrefWidth(Integer.MAX_VALUE);
         reset.setOnMouseClicked(new ResetHandler());
         
@@ -103,31 +108,49 @@ public class GenericComboEnumPane<E> extends BorderPane
         
         controller = cont;
         
-        text = new Label(cont.getControlName());
+        text = new Label(cont.getControllerName());
         text.setAlignment(Pos.CENTER_LEFT);
         
-        combo = new ComboBox<>(FXCollections.observableArrayList(cont.getAllValues().getAllInRange()));
+        combo = new ComboBox<>(FXCollections.observableArrayList(cont.getValueRange().getAllInRange()));
         combo.getSelectionModel().select(cont.getMinValue());
+        combo.valueProperty().addListener(new ComboListener());
         
         apply = new Button("Apply");
-        apply.setPrefWidth(Integer.MAX_VALUE);
+        apply.setTooltip(new Tooltip("Set value to " + cont.getMinValue().toString()));
+        apply.setPrefWidth(100*GoliathEnviousFX.SCALE);
         apply.setOnMouseClicked(new ControllerApplyHandler());
         
+        reset = new Button("Reset");
+        reset.setTooltip(new Tooltip("Reset value to " + cont.getResetValue().toString()));
+        reset.setPrefWidth(100*GoliathEnviousFX.SCALE);
+        reset.setOnMouseClicked(new ControllerResetHandler());
+      
         if(!cont.getOperationalStatus().equals(OperationalStatus.CONTROLLABLE))
         {
             combo.setDisable(true);
             apply.setDisable(true);
+            reset.setDisable(true);
         }
         
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(8*GoliathEnviousFX.SCALE);
-        buttonBox.setMinWidth(100*GoliathEnviousFX.SCALE);
-        buttonBox.setMaxWidth(100*GoliathEnviousFX.SCALE);
+        buttonBox.setMinWidth(200*GoliathEnviousFX.SCALE);
+        buttonBox.setMaxWidth(200*GoliathEnviousFX.SCALE);
         buttonBox.getChildren().add(apply);
+        buttonBox.getChildren().add(reset);
         
         super.setTop(text);
         super.setBottom(buttonBox);
         super.setRight(combo);
+    }
+    
+    private class ComboListener implements ChangeListener<E>
+    {
+        @Override
+        public void changed(ObservableValue<? extends E> ov, E t, E t1)
+        {
+            apply.setTooltip(new Tooltip("Set value to " + t1.toString()));
+        }
     }
     
     private class ReadableListener implements ChangeListener<E>
@@ -164,11 +187,11 @@ public class GenericComboEnumPane<E> extends BorderPane
             try
             {
                 controller.setValue(combo.getValue());
-                AppStatusBar.setActionText(controller.getControlName() + " has been set to " + combo.getValue() + ".");
+                AppStatusBar.setActionText(controller.getControllerName() + " has been set to " + combo.getValue() + ".");
             }
             catch (ValueSetFailedException ex)
             {
-                AppStatusBar.setActionText("Failed to set new value for " + controller.getControlName() + ": " + ex.getLocalizedMessage() + ".");
+                AppStatusBar.setActionText("Failed to set new value for " + controller.getControllerName() + ": " + ex.getLocalizedMessage() + ".");
             }
         }          
     }
@@ -182,6 +205,24 @@ public class GenericComboEnumPane<E> extends BorderPane
             {
                 readable.getController().get().reset();
                 AppStatusBar.setActionText(readable.nvTargetProperty().get() + " " + readable.displayNameProperty().get() + " has been set to " + readable.displayValueProperty().get() + ".");
+            }
+            catch (ControllerResetFailedException ex)
+            {
+                AppStatusBar.setActionText("Failed to set new value for " + readable.nvTargetProperty().get() + " " + readable.displayNameProperty().get() + ". Reason: " + ex.getLocalizedMessage() + ".");
+            }
+            combo.setValue(readable.getValue());
+        }          
+    }
+    
+    private class ControllerResetHandler implements EventHandler<MouseEvent>
+    {
+        @Override
+        public void handle(MouseEvent event)
+        {
+            try
+            {
+                controller.reset();
+                AppStatusBar.setActionText(controller.getControllerName() + " has been reset.");
             }
             catch (ControllerResetFailedException ex)
             {

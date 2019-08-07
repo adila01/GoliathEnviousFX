@@ -24,11 +24,13 @@
 package goliathenviousfx.buttontabnav.gpu;
 
 import goliath.envious.gpu.NvGPU;
+import goliath.envious.utility.EnviousPlatform;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsettings.performance.PerformanceLevel;
 import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericComboEnumPane;
+import goliathenviousfx.settings.AppSettings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -77,22 +79,25 @@ public class PowerMizerSectionPane extends SectionContentPane
         maxClock.setSortable(false);
         
         minMemory = new TableColumn<>("Min Memory(MHz)");
-        minMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMin"));
-        
-        minMemory.setEditable(false);
-        minMemory.setSortable(false);
-        
         maxMemory = new TableColumn<>("Max Memory(MHz)");
-        maxMemory.setEditable(false);
-        maxMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMax"));
+
+        if(!AppSettings.getTransferRatePowerMizer().getValue())
+        {
+            minMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMin"));
+            maxMemory.setCellValueFactory(new PropertyValueFactory<>("effectiveMax"));
+        }
+        else
+        {
+            minMemory.setCellValueFactory(new PropertyValueFactory<>("transferMin"));
+            maxMemory.setCellValueFactory(new PropertyValueFactory<>("transferMax"));
+        }
         
-        maxMemory.setSortable(false);
         table.getColumns().addAll(perfLevel, minClock, maxClock, minMemory, maxMemory);
                 
         NvSettings.getNvGPUInstance(g).getCurrentPerformanceLevel().valueProperty().addListener(new ValueListener());
         table.getSelectionModel().select(NvSettings.getNvGPUInstance(g).getCurrentPerformanceLevel().getValue());
         
-        comboPane = new GenericComboEnumPane(NvSettings.getNvGPUInstance(g).getPowerMizerMode());
+        comboPane = new GenericComboEnumPane<>(NvSettings.getNvGPUInstance(g).getPowerMizerMode());
         
         super.addTo(table);
         super.addTo(comboPane);

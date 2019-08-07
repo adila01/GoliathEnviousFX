@@ -33,9 +33,9 @@ public class CoolbitsSectionContentPane extends SectionContentPane
     
     public CoolbitsSectionContentPane()
     {
-        super("Coolbits Control");
+        super("Cool-bits Control");
         
-        coolbitsPane = new GenericComboEnumPane(NvXConfig.getCoolbitsController());
+        coolbitsPane = new GenericComboEnumPane<>(NvXConfig.getCoolbitsController());
         
         super.addTo(coolbitsPane);
     }

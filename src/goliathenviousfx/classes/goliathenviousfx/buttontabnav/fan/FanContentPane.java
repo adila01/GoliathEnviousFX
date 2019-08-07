@@ -40,6 +40,6 @@ public class FanContentPane extends ContentPane
     {
         super();
         
-        super.add(new FanSectionPane(NvGPU.getPrimaryNvGPU()), 0, super.getRowCount());
+        super.add(new FanSectionPane(gpu), 0, super.getRowCount());
     }
 }

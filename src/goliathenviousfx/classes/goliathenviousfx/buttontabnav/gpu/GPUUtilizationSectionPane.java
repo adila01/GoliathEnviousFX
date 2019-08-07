@@ -24,57 +24,29 @@
 package goliathenviousfx.buttontabnav.gpu;
 
 import goliath.envious.gpu.NvGPU;
+import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsmi.main.NvSMI;
-import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.Tile;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.layout.TilePane;
+import goliathenviousfx.custom.TileDisplayPane;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GPUUtilizationSectionPane extends SectionContentPane
 {
-    private final NvGPU gpu;
-    
     public GPUUtilizationSectionPane(NvGPU g)
     {
         super(g.getNvTarget() + " Utilization");
         
-        gpu = g;
+        List<ReadOnlyNvReadable> rdbls = new ArrayList<>();
         
-        TilePane tilePane = new TilePane();
-        tilePane.setStyle("-fx-background-color: -fx-theme-header;");
-        tilePane.setAlignment(Pos.CENTER);
-        tilePane.setPadding(new Insets(15*GoliathEnviousFX.SCALE));
-        tilePane.setVgap(8*GoliathEnviousFX.SCALE);
-        tilePane.setHgap(8*GoliathEnviousFX.SCALE);
+        rdbls.add(NvSMI.getNvGPUInstance(g).getCoreUtilization());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getMemoryUtilization());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getPCIeUtilization());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getVideoEngineUtilization());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getVideoDecoderUtilization());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getVideoEncoderUtilization());
         
-        Tile coreUtil = new Tile();
-        coreUtil.setNvReadable(NvSMI.getNvGPUInstance(g).getCoreUtilization());
-        
-        Tile memoryBandwidthUtilization = new Tile();
-        memoryBandwidthUtilization.setNvReadable(NvSMI.getNvGPUInstance(g).getMemoryUtilization());
-        
-        Tile pcieUtilizationBandwidth = new Tile();
-        pcieUtilizationBandwidth.setNvReadable(NvSettings.getNvGPUInstance(g).getPCIeUtilization());
-        
-        Tile videoEngineUtilization = new Tile();
-        videoEngineUtilization.setNvReadable(NvSettings.getNvGPUInstance(g).getVideoEngineUtilization());
-        
-        Tile videoEncoderUtilization = new Tile();
-        videoEncoderUtilization.setNvReadable(NvSettings.getNvGPUInstance(g).getVideoEncoderUtilization());
-        
-        Tile videoDecoderUtilization = new Tile();
-        videoDecoderUtilization.setNvReadable(NvSettings.getNvGPUInstance(g).getVideoDecoderUtilization());
-        
-        tilePane.getChildren().add(coreUtil);
-        tilePane.getChildren().add(memoryBandwidthUtilization); 
-        tilePane.getChildren().add(pcieUtilizationBandwidth);
-        tilePane.getChildren().add(videoEngineUtilization);
-        tilePane.getChildren().add(videoEncoderUtilization);
-        tilePane.getChildren().add(videoDecoderUtilization);
-        
-        super.addTo(tilePane);
+        super.addTo(new TileDisplayPane(rdbls));
     }
 }

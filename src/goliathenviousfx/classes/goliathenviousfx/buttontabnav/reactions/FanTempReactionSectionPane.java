@@ -28,21 +28,21 @@ import goliath.nvsettings.main.NvSettings;
 import goliath.nvsmi.main.NvSMI;
 import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.ReactionSliderBox;
+import goliathenviousfx.custom.ReactionPercentBox;
 import goliathenviousfx.custom.Space;
 
 public class FanTempReactionSectionPane extends SectionContentPane
 {
-    private final ReactionSliderBox tempFanSpeedReaction;
-    private final ReactionSliderBox tempLogoBrightnessReaction;
+    private final ReactionPercentBox tempFanSpeedReaction;
+    private final ReactionPercentBox tempLogoBrightnessReaction;
     
     public FanTempReactionSectionPane(NvGPU g)
     {
         super(g.getNvTarget() + " Temperature Based NvReactions");
         
-        tempFanSpeedReaction = new ReactionSliderBox("Fan Speed(" + NvSettings.getPrimaryNvGPUInstance().getNvFan().getFanTargetSpeed().getUnit() + ")", NvSMI.getPrimaryNvGPUInstance().getCoreTemp(), NvSettings.getNvGPUInstance(g).getNvFan().getFanTargetSpeed().getController().get());
+        tempFanSpeedReaction = new ReactionPercentBox("Fan Speed(" + NvSettings.getPrimaryNvGPUInstance().getNvFan().getFanTargetSpeed().getUnit() + ")", NvSMI.getPrimaryNvGPUInstance().getCoreTemp(), NvSettings.getNvGPUInstance(g).getNvFan().getFanTargetSpeed().getController().get());
         
-        tempLogoBrightnessReaction = new ReactionSliderBox("Logo Brightness(" + NvSettings.getPrimaryNvGPUInstance().getNvGPULogoBrightness().getUnit() + ")", NvSMI.getPrimaryNvGPUInstance().getCoreTemp(), NvSettings.getNvGPUInstance(g).getNvGPULogoBrightness().getController().get());
+        tempLogoBrightnessReaction = new ReactionPercentBox("Logo Brightness(" + NvSettings.getPrimaryNvGPUInstance().getNvGPULogoBrightness().getUnit() + ")", NvSMI.getPrimaryNvGPUInstance().getCoreTemp(), NvSettings.getNvGPUInstance(g).getNvGPULogoBrightness().getController().get());
         
         Space space = new Space(true);
         space.setMinHeight(1*GoliathEnviousFX.SCALE);

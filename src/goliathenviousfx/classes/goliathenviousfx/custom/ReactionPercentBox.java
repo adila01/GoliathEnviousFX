@@ -2,11 +2,12 @@ package goliathenviousfx.custom;
 
 import goliath.envious.enums.OperationalStatus;
 import goliath.envious.exceptions.ValueSetFailedException;
-import goliath.envious.interfaces.NvControllable;
+import goliath.envious.interfaces.ReadOnlyNvControllable;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
+import goliath.envious.utility.EnviousPlatform;
 import goliathenviousfx.AppStatusBar;
 import goliathenviousfx.GoliathEnviousFX;
 import javafx.beans.value.ChangeListener;
@@ -20,16 +21,16 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
-public class ReactionSliderBox extends BorderPane
+public class ReactionPercentBox extends BorderPane
 {
     private final ToggleButton enable;
     private final ReadOnlyNvReadable<Integer> readable;
-    private final NvControllable<Integer> controller;
+    private final ReadOnlyNvControllable<Integer> controller;
     private final ToggleButton disable;
     private final Spinner<Integer> spinner;
     private final ChangeListener<Integer> binding;
     
-    public ReactionSliderBox(String text, ReadOnlyNvReadable<Integer> rdbl, NvControllable<Integer> cont)
+    public ReactionPercentBox(String text, ReadOnlyNvReadable<Integer> rdbl, ReadOnlyNvControllable<Integer> cont)
     {
         super();
         super.setStyle("-fx-background-color: -fx-theme-header;");
@@ -55,7 +56,7 @@ public class ReactionSliderBox extends BorderPane
         group.selectToggle(disable);
 
         HBox buttonBox = new HBox();
-        buttonBox.setSpacing(10*GoliathEnviousFX.SCALE);
+        buttonBox.setSpacing(8*GoliathEnviousFX.SCALE);
         buttonBox.setMinWidth(200*GoliathEnviousFX.SCALE);
         buttonBox.setMaxWidth(200*GoliathEnviousFX.SCALE);
         buttonBox.getChildren().add(enable);
@@ -64,7 +65,7 @@ public class ReactionSliderBox extends BorderPane
         Label title = new Label(text);
         title.setAlignment(Pos.CENTER_LEFT);
         
-        spinner = new Spinner(new SpinnerValueFactory.IntegerSpinnerValueFactory(-100, 100, 0));
+        spinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(-100, 100, 0));
         spinner.setPrefWidth(100*GoliathEnviousFX.SCALE);
         
         if(!cont.getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE))
@@ -74,11 +75,22 @@ public class ReactionSliderBox extends BorderPane
             disable.setDisable(true);
         }
         
+        EnviousPlatform.CURRENT.dirtyPlatformProperty().addListener(new DirtyPlatformListener());
+        
         super.setTop(title);
         super.setRight(spinner);
         super.setBottom(buttonBox);
     }
 
+    private class DirtyPlatformListener implements ChangeListener<Boolean>
+    {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+        {
+            readable.valueProperty().removeListener(binding);
+        }
+    }
+    
     private class ValueListener implements ChangeListener<Integer>
     {
         @Override
@@ -108,6 +120,12 @@ public class ReactionSliderBox extends BorderPane
         @Override
         public void handle(MouseEvent event)
         {   
+            if(EnviousPlatform.CURRENT.dirtyPlatformProperty().get() == true)
+            {
+                disable.setSelected(true);
+                return;
+            }
+            
             readable.valueProperty().addListener(binding);
             AppStatusBar.setActionText("NvReaction for " + readable.getNvTarget() + " " + readable.displayNameProperty().get() + " has been enabled.");
         }

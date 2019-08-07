@@ -24,16 +24,13 @@
 package goliathenviousfx.buttontabnav;
 
 import goliathenviousfx.GoliathEnviousFX;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class ContentPane extends GridPane
-{
-    private final List<SectionContentPane> sections;
-    
+{   
     public ContentPane()
     {
         super();
@@ -45,16 +42,10 @@ public class ContentPane extends GridPane
         conWidthContent.setPercentWidth(95);
         
         super.getColumnConstraints().add(conWidthContent);
-        
-        sections = new ArrayList<>();
     }
-    public List<SectionContentPane> getSections()
+
+    public void addTo(Node node)
     {
-        return sections;
-    }
-    
-    public void addSection(SectionContentPane pane)
-    {
-        sections.add(pane);
+        super.add(node, 0, super.getRowCount());
     }
 }

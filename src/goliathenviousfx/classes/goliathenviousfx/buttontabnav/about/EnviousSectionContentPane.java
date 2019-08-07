@@ -1,6 +1,7 @@
 package goliathenviousfx.buttontabnav.about;
 
 import goliath.envious.gpu.NvGPU;
+import goliath.envious.utility.EnviousPlatform;
 import goliath.nvsmi.main.NvSMI;
 import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
@@ -21,7 +22,7 @@ public class EnviousSectionContentPane extends SectionContentPane
         
         List<Space> spaces = new ArrayList<>();
         
-        for(int i = 0; i < 2; i++)
+        for(int i = 0; i < 1; i++)
         {
             spaces.add(new Space(true));
             spaces.get(i).setMinHeight(1*GoliathEnviousFX.SCALE);
@@ -30,7 +31,7 @@ public class EnviousSectionContentPane extends SectionContentPane
         
         panes = new ArrayList<>();
         
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 2; i++)
         {
             panes.add(new BorderPane());
             panes.get(i).setPadding(new Insets(8*GoliathEnviousFX.SCALE, 5*GoliathEnviousFX.SCALE, 8*GoliathEnviousFX.SCALE, 5*GoliathEnviousFX.SCALE));
@@ -42,13 +43,8 @@ public class EnviousSectionContentPane extends SectionContentPane
         panes.get(1).setLeft(new Label("Nvidia GPU Count"));
         panes.get(1).setRight(new Label(String.valueOf(NvGPU.getNvGPUList().size())));
         
-        panes.get(2).setLeft(new Label("Force Unsupported Features"));
-        panes.get(2).setRight(new Label(Boolean.toString(NvGPU.getPrimaryNvGPU().getForceUnsupportedFeatures())));
-        
         super.addTo(panes.get(0));
         super.addTo(spaces.get(0));
         super.addTo(panes.get(1));
-        super.addTo(spaces.get(1));
-        super.addTo(panes.get(2));
     }
 }

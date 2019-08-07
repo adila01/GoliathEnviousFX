@@ -24,83 +24,28 @@
 package goliathenviousfx.buttontabnav.gpu;
 
 import goliath.envious.gpu.NvGPU;
-import goliath.nvsmi.enums.PerformanceLimitState;
+import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliath.nvsmi.main.NvSMI;
-import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
-import goliathenviousfx.custom.Tile;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.layout.TilePane;
+import goliathenviousfx.custom.TileDisplayPane;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GPUPerformanceLimitReasons extends SectionContentPane
-{
-    private final TilePane tilePane;
-    
+{   
     public GPUPerformanceLimitReasons(NvGPU g)
     {
         super(g.getNvTarget() + " Performance Limiters");
         
-        tilePane = new TilePane();
-        tilePane.setStyle("-fx-background-color: -fx-theme-header;");
-        tilePane.setAlignment(Pos.CENTER);
-        tilePane.setPadding(new Insets(16*GoliathEnviousFX.SCALE));
-        tilePane.setVgap(8*GoliathEnviousFX.SCALE);
-        tilePane.setHgap(8*GoliathEnviousFX.SCALE);
+        List<ReadOnlyNvReadable> rdbls = new ArrayList<>();
         
-        Tile idleLimit = new Tile();
-        idleLimit.setNvReadable(NvSMI.getNvGPUInstance(g).getIdlePerformanceLimit());
-        NvSMI.getNvGPUInstance(g).getIdlePerformanceLimit().valueProperty().addListener(new ValueListener(idleLimit));
+        rdbls.add(NvSMI.getNvGPUInstance(g).getIdlePerformanceLimit());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getAppClockSettingsPerformanceLimit());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getSoftwarePowerCapPerformanceLimit());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getHardwareThermalSlowdownPerformanceLimit());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getHardwarePowerBrakeSlowdownPerformanceLimit());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getSyncBoostPerformanceLimit());
         
-        Tile appClockLimit = new Tile();
-        appClockLimit.setNvReadable(NvSMI.getNvGPUInstance(g).getAppClockSettingsPerformanceLimit());
-        NvSMI.getNvGPUInstance(g).getAppClockSettingsPerformanceLimit().valueProperty().addListener(new ValueListener(appClockLimit));
-        
-        Tile softwarePowerCapLimit = new Tile();
-        softwarePowerCapLimit.setNvReadable(NvSMI.getNvGPUInstance(g).getSoftwarePowerCapPerformanceLimit());
-        NvSMI.getNvGPUInstance(g).getSoftwarePowerCapPerformanceLimit().valueProperty().addListener(new ValueListener(softwarePowerCapLimit));
-        
-        Tile hardwareThermalLimit = new Tile();
-        hardwareThermalLimit.setNvReadable(NvSMI.getNvGPUInstance(g).getHardwareThermalSlowdownPerformanceLimit());
-        NvSMI.getNvGPUInstance(g).getHardwareThermalSlowdownPerformanceLimit().valueProperty().addListener(new ValueListener(hardwareThermalLimit));
-        
-        Tile hardwarePowerBrakeLimit = new Tile();
-        hardwarePowerBrakeLimit.setNvReadable(NvSMI.getNvGPUInstance(g).getHardwarePowerBrakeSlowdownPerformanceLimit());
-        NvSMI.getNvGPUInstance(g).getHardwarePowerBrakeSlowdownPerformanceLimit().valueProperty().addListener(new ValueListener(hardwarePowerBrakeLimit));
-        
-        Tile syncBoostLimit = new Tile();
-        syncBoostLimit.setNvReadable(NvSMI.getNvGPUInstance(g).getSyncBoostPerformanceLimit());
-        NvSMI.getNvGPUInstance(g).getSyncBoostPerformanceLimit().valueProperty().addListener(new ValueListener(syncBoostLimit));
-        
-        tilePane.getChildren().add(idleLimit);
-        tilePane.getChildren().add(appClockLimit);
-        tilePane.getChildren().add(softwarePowerCapLimit); 
-        tilePane.getChildren().add(hardwareThermalLimit);
-        tilePane.getChildren().add(hardwarePowerBrakeLimit);
-        tilePane.getChildren().add(syncBoostLimit);
-        
-        super.addTo(tilePane);
-    }
-    private class ValueListener implements ChangeListener<PerformanceLimitState>
-    {
-        private final Tile tile;
-        
-        public ValueListener(Tile tl)
-        {
-            tile = tl;
-        }
-        
-        @Override
-        public void changed(ObservableValue<? extends PerformanceLimitState> observable, PerformanceLimitState oldValue, PerformanceLimitState newValue)
-        {
-            /*
-            if(newValue.equals(PerformanceLimitState.ACTIVE))
-                tile.setStyle("-fx-background-color: -fx-theme-selected;");
-            else
-                tile.setStyle("-fx-background-color: -fx-theme-background-alt;");
-            */
-        }
+        super.addTo(new TileDisplayPane(rdbls));
     }
 }

@@ -23,6 +23,7 @@
  */
 package goliathenviousfx.custom;
 
+import goliath.envious.enums.OperationalStatus;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliathenviousfx.GoliathEnviousFX;
 import javafx.geometry.Insets;
@@ -81,5 +82,29 @@ public class TileNvReadablePane extends TilePane
         super.getChildren().add(opStatus);
         super.getChildren().add(update);
         super.getChildren().add(measurement);
+        
+        if(rdbl.getOperationalStatus().equals(OperationalStatus.READABLE_AND_CONTROLLABLE) || rdbl.cmdNameProperty().get().equals("power.limit") && !rdbl.getOperationalStatus().equals(OperationalStatus.NOT_SUPPORTED))
+        {
+            Tile controlName = new Tile();
+            controlName.addLabel("Controller Name Property");
+            controlName.setStringProperty(rdbl.getController().get().controllerNameProperty());
+            
+            Tile range = new Tile();
+            range.addLabel("Value Range Property");
+            range.setObjectProperty(rdbl.getController().get().valueRangeProperty());
+            
+            Tile reset = new Tile();
+            reset.addLabel("Reset Value Property");
+            reset.setObjectProperty(rdbl.getController().get().resetValueProperty());
+            
+            Tile last = new Tile();
+            last.addLabel("Last Value Property");
+            last.setObjectProperty(rdbl.getController().get().lastValueProperty());
+            
+            super.getChildren().add(controlName);
+            super.getChildren().add(range);
+            super.getChildren().add(reset);
+            super.getChildren().add(last);
+        }
     }
 }

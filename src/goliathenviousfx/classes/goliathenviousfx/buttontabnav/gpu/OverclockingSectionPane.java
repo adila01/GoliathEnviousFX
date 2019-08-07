@@ -24,18 +24,16 @@
 package goliathenviousfx.buttontabnav.gpu;
 
 import goliath.envious.gpu.NvGPU;
+import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsmi.main.NvSMI;
 import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.GenericControllableSliderBox;
 import goliathenviousfx.custom.Space;
-import goliathenviousfx.custom.Tile;
+import goliathenviousfx.custom.TileDisplayPane;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.layout.TilePane;
 
 public class OverclockingSectionPane extends SectionContentPane
 { 
@@ -57,37 +55,13 @@ public class OverclockingSectionPane extends SectionContentPane
             spaces.get(i).setMaxHeight(1*GoliathEnviousFX.SCALE);
         }
         
-        TilePane tilePane = new TilePane();
-        tilePane.setStyle("-fx-background-color: -fx-theme-header;");
-        tilePane.setAlignment(Pos.CENTER);
-        tilePane.setPadding(new Insets(15*GoliathEnviousFX.SCALE));
-        tilePane.setVgap(8*GoliathEnviousFX.SCALE);
-        tilePane.setHgap(8*GoliathEnviousFX.SCALE);
-        
-        Tile coreSpeed = new Tile();
-        coreSpeed.setNvReadable(NvSMI.getNvGPUInstance(g).getCoreClock());
-        
-        Tile coreOffset = new Tile();
-        coreOffset.setNvReadable(NvSettings.getNvGPUInstance(g).getCoreOffset());
-        
-        Tile memoryClock = new Tile();
-        memoryClock.setNvReadable(NvSMI.getNvGPUInstance(g).getMemoryClock());
-        
-        Tile memoryOffset = new Tile();
-        memoryOffset.setNvReadable(NvSettings.getNvGPUInstance(g).getMemoryOffset());
-        
-        Tile voltage = new Tile();
-        voltage.setNvReadable(NvSettings.getNvGPUInstance(g).getCurrentVoltage());
-        
-        Tile voltageOffset = new Tile();
-        voltageOffset.setNvReadable(NvSettings.getNvGPUInstance(g).getVoltageOffset());
-        
-        tilePane.getChildren().add(coreSpeed);
-        tilePane.getChildren().add(coreOffset);
-        tilePane.getChildren().add(memoryClock);
-        tilePane.getChildren().add(memoryOffset);
-        tilePane.getChildren().add(voltage);
-        tilePane.getChildren().add(voltageOffset);
+        List<ReadOnlyNvReadable> rdbls = new ArrayList<>();
+        rdbls.add(NvSMI.getNvGPUInstance(g).getCoreClock());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getCoreOffset());
+        rdbls.add(NvSMI.getNvGPUInstance(g).getMemoryClock());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getMemoryOffset());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getVoltageCurrent());
+        rdbls.add(NvSettings.getNvGPUInstance(g).getVoltageOffset());
         
         coreControl = new GenericControllableSliderBox(NvSettings.getNvGPUInstance(g).getCoreOffset());
         
@@ -95,7 +69,7 @@ public class OverclockingSectionPane extends SectionContentPane
         
         voltageControl = new GenericControllableSliderBox(NvSettings.getNvGPUInstance(g).getVoltageOffset());
 
-        super.addTo(tilePane);
+        super.addTo(new TileDisplayPane(rdbls));
         super.addTo(spaces.get(0));
         super.addTo(coreControl);
         super.addTo(spaces.get(1));

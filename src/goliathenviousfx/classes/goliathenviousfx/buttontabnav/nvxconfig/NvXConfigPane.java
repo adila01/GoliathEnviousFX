@@ -31,7 +31,7 @@ public class NvXConfigPane extends ContentPane
     {
         super();
         
-        super.add(new CoolbitsSectionContentPane(), 0, super.getRowCount());
+        super.addTo(new CoolbitsSectionContentPane());
     }
     
 }

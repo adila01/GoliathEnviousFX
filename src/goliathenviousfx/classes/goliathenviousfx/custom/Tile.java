@@ -23,6 +23,7 @@
  */
 package goliathenviousfx.custom;
 
+import goliath.envious.abstracts.SettingProperty;
 import goliath.envious.enums.Unit;
 import goliath.envious.interfaces.NvTarget;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
@@ -34,11 +35,30 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class Tile extends VBox
 {   
+    public static class TileMouseEnterHandler implements EventHandler<MouseEvent>
+    {
+        @Override
+        public void handle(MouseEvent event)
+        {
+            ((Tile)event.getSource()).setStyle("-fx-background-color: -fx-theme-selectable-hover;");
+        }
+    }
+    
+    public static class TileMouseExitHandler implements EventHandler<MouseEvent>
+    {
+        @Override
+        public void handle(MouseEvent event)
+        {
+            ((Tile)event.getSource()).setStyle("-fx-background-color: -fx-theme-background-alt;");
+        }
+    }
+    
     private ReadOnlyNvReadable<?> readable;
     
     public Tile()
@@ -50,9 +70,10 @@ public class Tile extends VBox
         
     }
     
-    public void setNvReadable(ReadOnlyNvReadable<?> rdbl)
+    public void setNvReadable(ReadOnlyNvReadable rdbl)
     {
         readable = rdbl;
+        Tooltip.install(this, new Tooltip("Show API info for " + readable.getDisplayName()));
         this.setOnMouseClicked(new InfoEvent());
         
         String text = rdbl.displayNameProperty().get();
@@ -68,9 +89,15 @@ public class Tile extends VBox
         Label lb = new Label(rdbl.displayValueProperty().get());
         rdbl.displayValueProperty().addListener(new ReadableBinder());
         
-        super.setOnMouseEntered(new MouseEnterHandler());
-        super.setOnMouseExited(new MouseExitHandler());
+        super.setOnMouseEntered(new TileMouseEnterHandler());
+        super.setOnMouseExited(new TileMouseExitHandler());
         super.getChildren().add(lb);
+    }
+    
+    public void setSettingProperty(SettingProperty setting)
+    {
+        super.getChildren().add(new Label(setting.getName()));
+        super.getChildren().add(new Label(setting.getValue().toString()));
     }
     
     
@@ -82,6 +109,17 @@ public class Tile extends VBox
 
         super.getChildren().add(lb);
     }
+    
+    public void setObjectProperty(String name, ReadOnlyProperty prop)
+    {   
+        Label lb = new Label();
+        lb.setText(prop.getValue().toString());
+        prop.addListener(new ObjectInfoListener(lb));
+
+        super.getChildren().add(new Label(name));
+        super.getChildren().add(lb);
+    }
+    
     
     public void setMeasurementProperty(ReadOnlyProperty<Unit> prop)
     {   
@@ -118,15 +156,6 @@ public class Tile extends VBox
         Label label = new Label();
         label.textProperty().bind(text);
         super.getChildren().add(label);
-    }
-    
-    private class ReadableBinder implements ChangeListener<String>
-    {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
-        {
-            ((Label)Tile.this.getChildren().get(1)).setText(newValue);
-        }
     }
     
     private class StringInfoListener implements ChangeListener<String>
@@ -182,7 +211,7 @@ public class Tile extends VBox
     private class InfoEvent implements EventHandler<MouseEvent>
     {
         private TileInfoStage infoStage;
-
+        
         @Override
         public void handle(MouseEvent event)
         {
@@ -193,21 +222,12 @@ public class Tile extends VBox
         }
     }
     
-    private class MouseEnterHandler implements EventHandler<MouseEvent>
+    private class ReadableBinder implements ChangeListener<String>
     {
         @Override
-        public void handle(MouseEvent event)
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
         {
-            ((Tile)event.getSource()).setStyle("-fx-background-color: -fx-theme-selectable-hover;");
-        }
-    }
-    
-    private class MouseExitHandler implements EventHandler<MouseEvent>
-    {
-        @Override
-        public void handle(MouseEvent event)
-        {
-            ((Tile)event.getSource()).setStyle("-fx-background-color: -fx-theme-background-alt;");
+            ((Label)Tile.this.getChildren().get(1)).setText(newValue);
         }
     }
 }

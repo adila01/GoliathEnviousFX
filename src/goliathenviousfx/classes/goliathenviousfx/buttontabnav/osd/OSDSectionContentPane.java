@@ -28,6 +28,7 @@ import goliath.envious.gpu.NvGPU;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import goliath.nvsettings.main.NvSettings;
 import goliath.nvsmi.main.NvSMI;
+import goliathenviousfx.settings.AppSettings;
 import goliathenviousfx.GoliathEnviousFX;
 import goliathenviousfx.buttontabnav.SectionContentPane;
 import goliathenviousfx.custom.Space;
@@ -59,7 +60,8 @@ public class OSDSectionContentPane extends SectionContentPane
     private static ListView<ReadOnlyNvReadable> activeReadableList;
     
     private final ListView<ReadOnlyNvReadable> fullReadableList;
-    private final Button fullToOnButton;
+    private final Button fullToOnUnderButton;
+    private final Button fullToOnAboveButton;
     private final Button onToOffButton;
     
     private final Spinner<Integer> xLoc;
@@ -85,7 +87,7 @@ public class OSDSectionContentPane extends SectionContentPane
         allReadables.add(NvSettings.getPrimaryNvGPUInstance().getUuid());
         allReadables.addAll(NvSMI.getPrimaryNvGPUInstance().getNvReadablesExceptOperationalStatus(OperationalStatus.NOT_SUPPORTED));  
         
-        if(!GoliathEnviousFX.smiOnly)
+        if(!AppSettings.getNvSMIOnly().getValue())
         {
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCUDACores());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCurrentPerformanceLevel());
@@ -97,7 +99,7 @@ public class OSDSectionContentPane extends SectionContentPane
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCoreOffset());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getMemoryOffset());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVoltageOffset());
-            allReadables.add(NvSettings.getPrimaryNvGPUInstance().getCurrentVoltage());
+            allReadables.add(NvSettings.getPrimaryNvGPUInstance().getVoltageCurrent());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getPowerMizerMode());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getNvGPULogoBrightness());
             allReadables.add(NvSettings.getPrimaryNvGPUInstance().getFanMode());  
@@ -131,10 +133,15 @@ public class OSDSectionContentPane extends SectionContentPane
         
         rdbls = activeReadableList.getItems();
         
-        fullToOnButton = new Button("-->");
-        fullToOnButton.setPrefWidth(100*GoliathEnviousFX.SCALE);
-        fullToOnButton.setAlignment(Pos.CENTER);
-        fullToOnButton.setOnMouseClicked(new OnMouseEvent());
+        fullToOnAboveButton = new Button("++>");
+        fullToOnAboveButton.setPrefWidth(100*GoliathEnviousFX.SCALE);
+        fullToOnAboveButton.setAlignment(Pos.CENTER);
+        fullToOnAboveButton.setOnMouseClicked(new OnAboveMouseEvent());
+        
+        fullToOnUnderButton = new Button("-->");
+        fullToOnUnderButton.setPrefWidth(100*GoliathEnviousFX.SCALE);
+        fullToOnUnderButton.setAlignment(Pos.CENTER);
+        fullToOnUnderButton.setOnMouseClicked(new OnUnderMouseEvent());
         
         onToOffButton = new Button("<--");
         onToOffButton.setPrefWidth(100*GoliathEnviousFX.SCALE);
@@ -146,7 +153,8 @@ public class OSDSectionContentPane extends SectionContentPane
         buttonBox.setSpacing(8*GoliathEnviousFX.SCALE);
         buttonBox.setAlignment(Pos.CENTER);
         
-        buttonBox.getChildren().add(fullToOnButton);
+        buttonBox.getChildren().add(fullToOnAboveButton);
+        buttonBox.getChildren().add(fullToOnUnderButton);
         buttonBox.getChildren().add(onToOffButton);
         
         GridPane readableSelectionBox = new GridPane();
@@ -175,11 +183,11 @@ public class OSDSectionContentPane extends SectionContentPane
             spaces.get(i).setMaxHeight(1*GoliathEnviousFX.SCALE);
         }
         
-        xLoc = new Spinner();
+        xLoc = new Spinner<>();
         xLoc.setPrefWidth(100*GoliathEnviousFX.SCALE);
         xLoc.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, (int)Screen.getPrimary().getBounds().getMaxX()));
         
-        yLoc = new Spinner();
+        yLoc = new Spinner<>();
         yLoc.setPrefWidth(100*GoliathEnviousFX.SCALE);
         yLoc.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, (int)Screen.getPrimary().getBounds().getMaxY()));
         
@@ -304,7 +312,32 @@ public class OSDSectionContentPane extends SectionContentPane
         }
     }
     
-    private class OnMouseEvent implements EventHandler<MouseEvent>
+    private class OnAboveMouseEvent implements EventHandler<MouseEvent>
+    {
+
+        @Override
+        public void handle(MouseEvent event)
+        {
+            if(activeReadableList.getItems().size() == 15)
+                return;
+
+            if(activeReadableList.getItems().contains(fullReadableList.getSelectionModel().getSelectedItem()))
+                return;
+                
+            if(activeReadableList.getItems().isEmpty())
+            {
+                activeReadableList.getItems().add(fullReadableList.getSelectionModel().getSelectedItem());
+                activeReadableList.getSelectionModel().selectFirst();
+            }
+            else
+            {
+                activeReadableList.getItems().add(activeReadableList.getSelectionModel().getSelectedIndex(), fullReadableList.getSelectionModel().getSelectedItem());
+                activeReadableList.getSelectionModel().select(fullReadableList.getSelectionModel().getSelectedItem());
+            }
+        }
+    }
+    
+    private class OnUnderMouseEvent implements EventHandler<MouseEvent>
     {
 
         @Override

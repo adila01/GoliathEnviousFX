@@ -26,7 +26,6 @@ package goliathenviousfx.custom;
 import goliath.envious.interfaces.ReadOnlyNvReadable;
 import static goliathenviousfx.GoliathEnviousFX.SCALE;
 import javafx.scene.Scene;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class TileInfoStage extends Stage
@@ -42,6 +41,5 @@ public class TileInfoStage extends Stage
         
         super.setScene(new Scene(new TileNvReadablePane(rdbl)));
         super.getScene().getStylesheets().add("goliath/css/Goliath-Envy.css");
-        //super.getScene().getRoot().setStyle(" -fx-font-size: " + Font.getDefault().getSize()*SCALE + "px;");
     }
 }
