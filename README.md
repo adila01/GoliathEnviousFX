@@ -68,6 +68,8 @@ Use 'view' menu to enable resizing. Resizing is disabled by default to reduce UI
 * On Screen Display for GPU info while in-game*
 * Performance Limit states
 * Ability to set coolbits value(root required)
+* Live monitors
+* App and API customization options
 * and more
 
 *Is just a transparent window and DOES NOT integrate with the game itself.
@@ -98,6 +100,9 @@ In-game performance as a result varies wildy and SHOULD NOT be used in any actua
 * JavaFX CSS Bug: black number color when switching to content containing a Spinner component. Switching to other content and back will fix this. Most likely https://bugs.openjdk.java.net/browse/JDK-8088506.
 * JavaFX CSS Bug: clicking and holding various UI components(slider thumbs, scrollbar, etc) and alt-tabbing results in those UI components keeping the selected CSS styling even when/after clicking other components. Clicking the glitched component fixes it.
 * JavaFX/Goliath Envious FX: various other minor CSS bugs with TableView column separator and button keyboard focus(hard to even notice the buttons unless you put your eyes directly to the screen). JavaFX's CSS documentation isn't well documented and I can't find any ways to fix these after hours of searching. They are *really* minor though.
+* JavaFX chart app size bug: making the window as small as possible with compact monitors enabled results in inconsistent visual chart updates.
+* JavaFX Bug: resizing a chart results in tick marks flicking in and out of existence. A white pixel is shown where the tick mark was at.
+* When returning from Gnome's cover screen, Goliath Envious FX's size will be bugged. Enabling resizable will result in the window snapping back to the correct position.
 
 ## Disclaimer
 
